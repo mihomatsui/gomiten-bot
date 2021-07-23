@@ -21,9 +21,11 @@ post '/callback' do
   events = client.parse_events_from(body)
   events.each do |event|
     if event.reply_token =="00000000000000000000000000000000";
-    return
+      return
+    end
     if event.reply_token == "ffffffffffffffffffffffffffffffff";
-    return
+      return
+    end
 
     if event.is_a?(Line::Bot::Event::Message)
       if event.type === Line::Bot::Event::MessageType::Text
