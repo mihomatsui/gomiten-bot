@@ -20,7 +20,7 @@ post '/callback' do
   end
   events = client.parse_events_from(body)
   events.each do |event|
-    if event.reply_token =="00000000000000000000000000000000": 
+    if event.reply_token =="00000000000000000000000000000000":
     return
     if event.reply_token == "ffffffffffffffffffffffffffffffff":
     return
