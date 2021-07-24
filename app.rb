@@ -2,7 +2,6 @@ require 'bundler/setup'
 Bundler.require
 require 'sinatra/reloader' if development?
 Dotenv.load
-
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -14,7 +13,6 @@ end
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
-  end
   unless client.validate_signature(body, signature)
     error 400 do 'Bad Request' end
   end
