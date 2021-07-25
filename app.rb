@@ -13,6 +13,10 @@ end
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
+  print("----1----")
+  print(body)
+  print(signature)
+  print("----2----")
   unless client.validate_signature(body, signature)
     error 400 do 'Bad Request' end
   end
