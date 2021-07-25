@@ -24,7 +24,7 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
-        if event['replyToken']="00000000000000000000000000000000";
+        if event['replyToken']="00000000000000000000000000000000"
         return 
         client.reply_message(event['replyToken'], message)
       end
