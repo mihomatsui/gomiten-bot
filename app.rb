@@ -18,6 +18,7 @@ post '/callback' do
   puts("----B----")
   print(signature)
   puts("----C----")
+  puts Net::HTTPResponse
   unless client.validate_signature(body, signature)
     error 400 do 'Bad Request' end
   end
