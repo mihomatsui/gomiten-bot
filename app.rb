@@ -18,7 +18,6 @@ post '/callback' do
   puts("----B----")
   print(signature)
   puts("----C----")
-  puts Net::HTTPResponse
   unless client.validate_signature(body, signature)
     error 400 do 'Bad Request' end
   end
@@ -31,6 +30,7 @@ post '/callback' do
           text: event.message['text']
         }
         client.reply_message(event['replyToken'], message)
+        p Net::HTTPResponse
       end
     end    
   end
