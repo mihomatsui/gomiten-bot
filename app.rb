@@ -30,7 +30,7 @@ post '/callback' do
           text: event.message['text']
         }
         client.reply_message(event['replyToken'], message)
-        p Net::HTTPResponse
+        
       end
     end    
   end
