@@ -18,15 +18,20 @@ post '/callback' do
   end
   events = client.parse_events_from(body)
   events.each do |event|
-    if event.is_a?(Line::Bot::Event::Message)
-      if event.type === Line::Bot::Event::MessageType::Text
-        message = {
-          type: "text",
-          text: event.message["text"]
-        }
-        client.reply_message(event["replyToken"], message)
-      end
+    case event
+    when Line::Bot::Event::Message
+      user_id = event['source']['userId']
+      reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
+      reply_text << "・「1」または「スタート」と入力すると、毎日朝7時に天気、\n"
+      reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
+      reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
+      reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n"
     end
+    message = {
+          type: "text",
+          text: reply_text
+        }
+    client.reply_message(event["replyToken"], message)
   end
   "OK"
 end
