@@ -13,11 +13,6 @@ end
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
-  puts("----A----")
-  puts(body)
-  puts("----B----")
-  print(signature)
-  puts("----C----")
   unless client.validate_signature(body, signature)
     error 400 do 'Bad Request' end
   end
@@ -26,13 +21,12 @@ post '/callback' do
     if event.is_a?(Line::Bot::Event::Message)
       if event.type === Line::Bot::Event::MessageType::Text
         message = {
-          type: 'text',
-          text: event.message['text']
+          type: "text",
+          text: event.message["text"]
         }
-        client.reply_message(event['replyToken'], message)
-        
+        client.reply_message(event["replyToken"], message)
       end
-    end    
+    end
   end
   "OK"
 end
