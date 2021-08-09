@@ -22,7 +22,7 @@ post '/callback' do
       if event.type === Line::Bot::Event::MessageType::Text
         message = {
           type: "text",
-          text: event.message["text"],
+          text: event.message["text"]
         }
         client.reply_message(event["replyToken"], message)
       end
