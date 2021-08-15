@@ -140,7 +140,3 @@ insert into weathers (id, pref, area, latitude, longitude, url, xpath) values (1
 insert into weathers (id, pref, area, latitude, longitude, url, xpath) values (139, '沖縄県', '本島中南部', 26.2602, 127.7074, 'http://www.drk7.jp/weather/xml/47.xml', 'weatherforecast/pref/area[5]');
 insert into weathers (id, pref, area, latitude, longitude, url, xpath) values (140, '沖縄県', '本島北部', 26.5849, 128.0040, 'http://www.drk7.jp/weather/xml/47.xml', 'weatherforecast/pref/area[6]');
 insert into weathers (id, pref, area, latitude, longitude, url, xpath) values (141, '沖縄県', '石垣島地方', 24.3984, 124.1698, 'http://www.drk7.jp/weather/xml/47.xml', 'weatherforecast/pref/area[7]');
-
-
-
-
