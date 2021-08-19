@@ -5,10 +5,6 @@ require 'rexml/document'
 # 北海道上川地方の今日の天気を取得する場合
 # weather = WeatherInfoConnector.new('北海道', '上川地方', 'http://www.drk7.jp/weather/xml/01.xml', 'weatherforecast/pref/area[1]', 0)
 
-# 天気情報の取得
-weather = WeatherInfoConnector.new(pref, area, url, xpath, set_day)
-puts weather.WeatherInfoConnector
-
 class WeatherInfoConnector
   def get_weatherinfo
     # URIをparse(解析)
@@ -34,7 +30,7 @@ class WeatherInfoConnector
 
     date = doc.elements['fix_xpath'].attributes['date'] #日時
     weather = doc.elements['fix_xpath' + '/weather'].text  #天気
-    max = doc.elements['fix_xpath' + '/temperature/range[1]'].text #最高気温
+    max = doc.elements['fix_xpath' + '/temperature/range[1]'].text #最高温
     min = doc.elements['fix_xpath' + '/temperature/range[2]'].text #最低気温
     per00to06 = doc.elements['fix_xpath' + '/rainfallchance/period[1]'].text  #降水確率
     per06to12 = doc.elements['fix_xpath' + '/rainfallchance/period[2]'].text

@@ -2,6 +2,10 @@ require 'bundler/setup'
 Bundler.require
 require 'sinatra/reloader' if development?
 Dotenv.load
+require './weather_info_connector.rb'
+
+
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
