@@ -2,8 +2,8 @@ require 'net/http'
 require 'uri'
 require 'rexml/document'
 
-# 北海道上川地方の今日の天気を取得する場合
-# weather = WeatherInfoConnector.new('北海道', '上川地方', 'http://www.drk7.jp/weather/xml/01.xml', 'weatherforecast/pref/area[1]', 0)
+# 愛知県西部の今日の天気を取得する場合
+# weather = WeatherInfoConnector.new('愛知県', '西部', 'http://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', 0)
 
 class WeatherInfoConnector
   def get_weatherinfo
