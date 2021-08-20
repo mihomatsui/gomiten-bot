@@ -42,13 +42,13 @@ class WeatherInfoConnector
     text06to12 = doc.elements["fix_xpath" + "/rainfallchance/period[2]"].attributes["hour"]
     text12to18 = doc.elements["fix_xpath" + "/rainfallchance/period[3]"].attributes["hour"]
     text18to24 = doc.elements["fix_xpath" + "/rainfallchance/period[4]"].attributes["hour"]
+    
+    # Botでメッセージを表示する
+    message = ''
+    message << %{#{pref} #{area} の#{date} の天気は #{weather}\n\n}
+    message << %{最高気温 #{max}℃\n}
+    message << %{最低気温 #{min}℃\n\n}
+    message << %{降水確率 #{text00to06}:#{per00to06}%,#{text06to12}:#{per06to12}%,#{text12to18}:#{per12to18}%,#{text18to24}:#{per18to24}%}
+    return message
   end  
-
-  # Botでメッセージを表示する
-  message = ''
-  message << %{#{pref} #{area} の#{date} の天気は #{weather}\n\n}
-  message << %{最高気温 #{max}\n}
-  message << %{最低気温 #{min}\n\n}
-  message << %{降水確率 #{text00to06}:#{per00to06}%,#{text06to12}:#{per06to12}%,#{text12to18}:#{per12to18}%,#{text18to24}:#{per18to24}%}
-  return message
 end
