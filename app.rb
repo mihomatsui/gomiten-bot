@@ -31,6 +31,19 @@ post '/callback' do
       reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
       reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
       reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n"
+      
+      case event.type
+      when Line::Bot::Event::MessageType::Text
+        # 文字列が入力された場合
+      end
+
+      when Line::Bot::Event::MessageType::Location
+        # 位置情報が入力された場合
+        # 緯度と経度を取得
+        latitude = event.message['latitude']
+        longitude = event.message['longitude']
+      end
+
     end
     message = {
           type: "text",
