@@ -41,8 +41,6 @@ post '/callback' do
         # 緯度と経度を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
-        puts latitude 
-        puts longitude
       end
 
     end
