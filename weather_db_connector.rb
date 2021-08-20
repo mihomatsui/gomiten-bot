@@ -11,20 +11,15 @@ class WeatherDbConnector
     database: ENV['mydatabase']
   )
 
-  #クラスを作成 クラス名はDBの一文字目を大文字にする
+  # クラスを作成
   class Weather < ActiveRecord::Base
   end
 
-  #1行目のレコードを呼び出す
-  first_weathers = Weather.first
-  #全てのレコードを呼び出す
-  all_weathers = Weather.all
-
-  puts "レコードの書式を表示"
-  p first_weathers
-
-  puts "レコードの内容をカラム別に呼び出す"
-  all_weathers.each do |allweather|
-    puts "#{allweather['id']} #{allweather['pref']} #{allweather['area']} #{allweather['latitude']} #{allweather['longitude']} #{allweather['url']} #{allweather['xpath']}"
+  def set_location(user_id, latitude, longitude)
+    p 'set_location'
+    # 絶対値を取得し一番小さい値の地域を設定する
+    calculate_point = %{(latitude - #{latitude}) + (longitude - #{longitude})}
+    result = Weather.select("weathers, ABS(point) AS calculate_point").order(:calculate_point :asc).first
+    puts %{#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']}, #{result['longitude']}}
   end
 end
