@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.require
 require 'sinatra/reloader' if development?
-Dotenv.load
+require './weather_db_connector.rb'
 require './weather_info_connector.rb'
 
 
