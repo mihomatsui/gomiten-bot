@@ -44,7 +44,7 @@ class WeatherInfoConnector
     text18to24 = doc.elements["fix_xpath" + "/rainfallchance/period[4]"].attributes["hour"]
   end  
 
-  #  Botでメッセージを表示する
+  # Botでメッセージを表示する
   message = ''
   message << %{#{pref} #{area} の#{date} の天気は #{weather}\n\n}
   message << %{最高気温 #{max}\n}
