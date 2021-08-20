@@ -1,8 +1,8 @@
 require 'bundler/setup'
 Bundler.require
 require 'sinatra/reloader' if development?
-require './weather_db_connector.rb'
-require './weather_info_connector.rb'
+require './weather_db_connector'
+require './weather_info_connector'
 
 
 
