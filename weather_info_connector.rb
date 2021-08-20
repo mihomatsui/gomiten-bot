@@ -37,7 +37,7 @@ class WeatherInfoConnector
     per06to12 = doc.elements['fix_xpath' + '/rainfallchance/period[2]'].text
     per12to18 = doc.elements['fix_xpath' + '/rainfallchance/period[3]'].text
     per18to24 = doc.elements['fix_xpath' + '/rainfallchance/period[4]'].text
-    # メッセージ送信で"00-06"を使用するためテキストを取得
+    # メッセージ送信で使用するためテキストを取得
     text00to06 = doc.elements['fix_xpath' + "/rainfallchance/period[1]"].attributes['hour'] 
     text06to12 = doc.elements["fix_xpath" + "/rainfallchance/period[2]"].attributes["hour"]
     text12to18 = doc.elements["fix_xpath" + "/rainfallchance/period[3]"].attributes["hour"]
