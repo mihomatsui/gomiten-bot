@@ -41,6 +41,9 @@ post '/callback' do
         # 緯度と経度を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
+
+        #緯度と経度から一番近い地方を設定する
+        
       end
 
     end
