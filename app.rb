@@ -35,13 +35,14 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         # 文字列が入力された場合
-      end
 
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         # 緯度と経度を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
+        puts latitude 
+        puts longitude
       end
 
     end
