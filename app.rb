@@ -1,7 +1,12 @@
 require 'bundler/setup'
 Bundler.require
+# 開発環境のみオートリロードをつける
 require 'sinatra/reloader' if development?
-Dotenv.load
+require './weather_db_connector'
+require './weather_info_connector'
+
+
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
