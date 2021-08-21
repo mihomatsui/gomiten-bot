@@ -5,7 +5,7 @@ require 'sinatra/reloader' if development?
 require './weather_db_connector'
 require './weather_info_connector'
 
-
+$db = WeatherDbConnector.new
 
 def client
   @client ||= Line::Bot::Client.new { |config|
@@ -38,11 +38,12 @@ post '/callback' do
 
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
+        
         # 緯度と経度を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
-
-        #緯度と経度から一番近い地方を設定する
+        pref, area = $db.set_location(user_id, latitude, longitude)
+        reply_text = %{地域を#{pref} #{area}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
         
       end
 
