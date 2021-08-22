@@ -18,10 +18,10 @@ class WeatherDbConnector
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     # 絶対値格納用のカラムを追加
-    # addsql = 'ALTER TABLE weathers ADD COLUMN abs decimal;'
-    # ActiveRecord::Base.connection.execute(addsql)
+    addsql = 'ALTER TABLE weathers ADD COLUMN abs decimal;'
+    ActiveRecord::Base.connection.execute(addsql)
 
-    # 絶対値を取得し一番小さい値の地域を設定する
+    # 緯度経度を計算して絶対値を取得する
     calculatepoint = '(latitude - #{latitude}) + (longitude - #{longitude}'
     calculatepoint_abs = abs(calculatepoint)
     # 計算結果を挿入して検索
