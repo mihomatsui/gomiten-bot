@@ -22,12 +22,14 @@ class WeatherDbConnector
     # ActiveRecord::Base.connection.execute(addsql)
 
     # 絶対値を取得し一番小さい値の地域を設定する
-    calculatepoint = '(latitude - #{latitude}) + (longitude - #{longitude})'
+    calculatepoint = '(latitude - #{latitude}) + (longitude - #{longitude}'
     calculatepoint_abs = abs(calculatepoint)
+    # 計算結果を挿入して検索
     insertsql = 'insert into weathers (abs) values (calculatepoint_abs);'
     searchsql = 'select * from weathers order by abs[asc].first'
     result = ActiveRecord::Base.connection.select_all(searchsql).to_hash
     
+    # 結果を取得
     puts %{#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']}, #{result['longitude']}}
     return result["pref"], result["area"]
 
