@@ -23,9 +23,5 @@ class WeatherDbConnector
     @weathers.each { |weather| weather.update(abs: 'abs(latitude - #{latitude}) + abs(longitude - #{longitude}')}
     result = @weathers.order(abs: :asc).first
     return result['pref'], result['area']
-
-    # 絶対値格納用のカラムを削除
-    # deletesql = 'ALTER TABLE weathers DROP COLUMN abs numeric;'
-    # ActiveRecord::Base.connection.execute(deletesql)
   end
 end
