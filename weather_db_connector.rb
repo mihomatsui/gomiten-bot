@@ -16,12 +16,13 @@ class WeatherDbConnector
   end
 
   def set_location(user_id, latitude, longitude)
-    p "set_location"
+    p 'set_location'
 
     # 緯度経度を計算して絶対値を取得する
     @weathers = Weather.all
-    @weathers.each { |weather| weather.update(abs: 'abs(latitude - #{latitude}) + abs(longitude - #{longitude}')}
-    result = @weathers.order(abs: :asc).first
+    abs = 'abs(latitude - #{latitude}) + abs(longitude - #{longitude})'
+    @weathers.update(abs: abs)
+    result = Weather.order(:abs).first
     return result['pref'], result['area']
   end
 end
