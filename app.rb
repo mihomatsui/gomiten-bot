@@ -42,6 +42,7 @@ post '/callback' do
         # 緯度と経度を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
+        puts "緯度と経度を取得しました！"
         pref, area = $db.set_location(user_id, latitude, longitude)
         reply_text = %{地域を#{pref} #{area}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
         
