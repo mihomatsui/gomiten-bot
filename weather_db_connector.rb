@@ -18,15 +18,8 @@ class WeatherDbConnector
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     con = ActiveRecord::Base.connection
-    result = con.execute('select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc').first
-    puts result
-    # 緯度経度を計算して絶対値を取得する
-    # @weathers = Weather.all
-    # point = '(latitude - #{latitude}) +(longitude - #{longitude})'
-    # point_abs = (point.to_i).abs
-    # p point_abs
-    # Weather.update_all(abs: point_abs)
-    # result = Weather.order(:abs).first
+    result = con.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
+    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result["longitude"]}"
     return result['pref'], result['area']
   end
 end
