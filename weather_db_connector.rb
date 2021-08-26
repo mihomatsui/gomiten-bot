@@ -15,6 +15,24 @@ class WeatherDbConnector
   class Weather < ActiveRecord::Base
   end
 
+  def initialize
+    # テーブルの作成
+    create_weathers
+    # データを挿入する
+    insert_weathers
+  end
+
+  def create_weathers
+    p 'create_weathers_table'
+    File.open('create_weathers.sql', 'r:utf-8') do |f|
+      sql = f.read
+      ActiveRecord::Base.connection.execute(sql)
+    end
+  end
+
+  def insert_weathers
+  end
+
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     con = ActiveRecord::Base.connection
