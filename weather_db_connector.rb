@@ -25,8 +25,8 @@ class WeatherDbConnector
   def create_weathers
     p 'create_weathers_table'
     File.open('create_weathers.sql', 'r:utf-8') do |f|
-      sql = f.read
-      ActiveRecord::Base.connection.execute(sql)
+      createsql = f.read
+      ActiveRecord::Base.connection.execute(createsql)
     end
   end
 
