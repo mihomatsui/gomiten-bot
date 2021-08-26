@@ -31,13 +31,19 @@ class WeatherDbConnector
   end
 
   def insert_weathers
+    p 'insert_weathers_table'
+    File.open('insert_weathers.sql', 'r:utf-8') do |f|
+      f.each_line do |createsql|
+        ActiveRecord::Base.connection.execute(createsql)
+      end
+    end
   end
 
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     con = ActiveRecord::Base.connection
     result = con.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result["longitude"]}"
+    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
     return result['pref'], result['area']
   end
 end
