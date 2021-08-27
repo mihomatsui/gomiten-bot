@@ -16,6 +16,7 @@ class WeatherDbConnector
   end
 
   def initialize
+    @conn = ActiveRecord::Base.connection
     # 毎回リセットする
     drop_weathers
     # テーブルの作成
@@ -28,7 +29,7 @@ class WeatherDbConnector
     p 'create_weathers_table'
     File.open('create_weathers.sql', 'r:utf-8') do |f|
       createsql = f.read
-      ActiveRecord::Base.connection.execute(createsql)
+      @conn.execute(createsql)
     end
   end
 
@@ -36,7 +37,7 @@ class WeatherDbConnector
     p 'insert_weathers_table'
     File.open('insert_weathers.sql', 'r:utf-8') do |f|
       f.each_line do |createsql|
-        ActiveRecord::Base.connection.execute(createsql)
+        @conn.execute(createsql)
       end
     end
   end
@@ -44,12 +45,12 @@ class WeatherDbConnector
   def drop_weathers
     p 'drop_weathers_table'
     weathers = Weather.table_name
-    ActiveRecord::Base.connection.drop_table(weathers)
+    @conn.drop_table(weathers)
   end
 
   def set_location(user_id, latitude, longitude)
     p 'set_location'
-    result = ActiveRecord::Base.connection.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
+    result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
     return result['pref'], result['area']
   end
