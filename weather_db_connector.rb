@@ -16,6 +16,8 @@ class WeatherDbConnector
   end
 
   def initialize
+    # 毎回リセットする
+    drop_weathers
     # テーブルの作成
     create_weathers
     # データを挿入する
@@ -37,6 +39,12 @@ class WeatherDbConnector
         ActiveRecord::Base.connection.execute(createsql)
       end
     end
+  end
+
+  def drop_weathers
+    p 'drop_weathers_table'
+    weathers = Weather.table_name
+    ActiveRecord::Base.connection.drop_table(weathers)
   end
 
   def set_location(user_id, latitude, longitude)
