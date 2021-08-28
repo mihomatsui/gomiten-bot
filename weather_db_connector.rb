@@ -60,6 +60,7 @@ class WeatherDbConnector
     p 'set_location'
     result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
+      @conn.execute("insert into notifications (user_id, hour,minute) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}) on confict(user_id) do update set user_id = values(user_id)")
     return result['pref'], result['area']
   end
 
