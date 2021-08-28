@@ -4,6 +4,7 @@ Bundler.require
 require 'sinatra/reloader' if development?
 require './weather_db_connector'
 require './weather_info_connector'
+require 'date'
 
 $db = WeatherDbConnector.new
 
@@ -34,8 +35,19 @@ post '/callback' do
       
       case event.type
       when Line::Bot::Event::MessageType::Text
-        # 文字列が入力された場合
+        case event.message['text']
+        when /.*(3|３|天気).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            # weather = WeatherInfoConnector.new('愛知県', '西部', 'http://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', 0)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'http://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 1) #名古屋駅
+            p e
+          end
+        end
 
+        d = DateTime.now
+        p "現在の時刻は#{d.hour}時#{d.min}分です"
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         
@@ -47,7 +59,6 @@ post '/callback' do
         reply_text = %{地域を#{pref} #{area}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
         
       end
-
     end
     message = {
           type: "text",

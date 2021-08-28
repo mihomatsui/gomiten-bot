@@ -51,7 +51,7 @@ class WeatherDbConnector
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
+    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}}"
     return result['pref'], result['area']
   end
 end
