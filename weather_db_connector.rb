@@ -26,10 +26,15 @@ class WeatherDbConnector
   end
 
   def create_weathers
-    p 'create_weathers_table'
+    p 'create_table'
     File.open('create_weathers.sql', 'r:utf-8') do |f|
       createsql = f.read
       @conn.execute(createsql)
+    end
+
+    File.open("notification.sql", "r:utf-8") do |f|
+      notificationsql = f.read
+      @conn.execute(notificationsql)
     end
   end
 
