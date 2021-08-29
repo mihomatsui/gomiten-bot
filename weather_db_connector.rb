@@ -94,4 +94,9 @@ class WeatherDbConnector
     end
     return results.first
   end
+
+  def fix_notifications
+    p 'fix_notifications'
+    @conn.execute("update notifications set hour = 7, minute = 0 where hour is null")
+  end
 end
