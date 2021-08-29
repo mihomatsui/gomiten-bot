@@ -4,6 +4,7 @@ require 'dotenv/load'
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
+  DEFAULT_AREA_ID = 1
 
   # 環境変数を使って接続する
   ActiveRecord::Base.establish_connection(
@@ -60,7 +61,7 @@ class WeatherDbConnector
     p 'set_location'
     result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
-      @conn.execute("insert into notifications (user_id, hour,minute) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}) on conflict(user_id) do update set user_id = values(user_id)")
+      @conn.execute("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},#{DEFAULT_AREA_ID},) on conflict(user_id) do update set area_id = values('#{area_id}')")
     return result['pref'], result['area']
   end
 
