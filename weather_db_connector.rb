@@ -57,14 +57,6 @@ class WeatherDbConnector
     @conn.drop_table(weathers)
   end
 
-  def set_location(user_id, latitude, longitude)
-    p 'set_location'
-    result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
-      @conn.execute("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},#{DEFAULT_AREA_ID},) on conflict(user_id) do update set area_id = values('#{area_id}')")
-    return result['pref'], result['area']
-  end
-
   def notification_enable_user(user_id)
     p 'enable_user'
     @conn.execute("insert into notifications (user_id, hour,minute, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, false) on conflict(user_id) do update set user_id = values(user_id), notification_disabled = values(notification_disabled)")
@@ -73,5 +65,13 @@ class WeatherDbConnector
   def notification_disnable_user(user_id)
     p 'disnable_user'
     @conn.execute("insert into notifications (user_id, hour,minute, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, true) on conflict(user_id) do update set user_id = values(user_id), notification_disabled = values(notification_disabled)")
+  end
+
+  def set_location(user_id, latitude, longitude)
+    p "set_location"
+    result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
+    puts "#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}"
+    @conn.execute("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},#{result["id"]},) on conflict(user_id) do update set area_id = values('#{area_id}')")
+    return result["pref"], result["area"]
   end
 end
