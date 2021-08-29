@@ -66,7 +66,7 @@ class WeatherDbConnector
 
   def notification_enable_user(user_id)
     p 'enable_user'
-    @conn.execute("insert into notifications (user_id, hour,minute, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, false) on confict(user_id) do update set user_id = values(user_id), notification_disabled = values(notification_disabled)")
+    @conn.execute("insert into notifications (user_id, hour,minute, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, false) on conflict(user_id) do update set user_id = values(user_id), notification_disabled = values(notification_disabled)")
   end
 
   def notification_disnable_user(user_id)
