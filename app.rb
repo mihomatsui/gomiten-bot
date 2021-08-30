@@ -35,7 +35,12 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         # 文字列が入力された場合
-
+        case event.message['text']
+        when /.*(1|１|スタート).*/
+          p 'テスト1'
+        when /.*(2|２|ストップ).*/
+          p 'テスト2'
+        end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         
