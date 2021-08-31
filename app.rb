@@ -37,9 +37,11 @@ post '/callback' do
         # 文字列が入力された場合
         case event.message['text']
         when /.*(1|１|スタート).*/
-          p 'テスト1'
+          $db.notification_enable_user(user_id)
+          info = $db.get_notifications(user_id)
+          reply_text = %{#{info['pref']} #{info['area']} の天気をお知らせします！}
         when /.*(2|２|ストップ).*/
-          p 'テスト2'
+          
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
