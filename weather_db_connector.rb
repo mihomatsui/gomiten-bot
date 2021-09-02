@@ -68,6 +68,11 @@ class WeatherDbConnector
     @conn.execute("insert into notifications (user_id, hour,minute, area_id, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notification_disabled = excluded.notification_disabled;")
   end
 
+  def set_time(user_id, hour, minute)
+    p 'set_time'
+    @conn.execute("insert into notifications (user_id, hour,minute, area_id, notification_disabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
+  end
+
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
