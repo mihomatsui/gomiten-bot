@@ -73,7 +73,7 @@ post '/callback' do
             p e
           end  
         end
-      when Line::Bot::Evqent::MessageType::Location
+      when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         
         # 緯度と経度を取得
