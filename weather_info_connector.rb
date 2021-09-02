@@ -6,7 +6,7 @@ require 'rexml/document'
 # weather = WeatherInfoConnector.new('愛知県', '西部', 'http://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', 0)
 
 class WeatherInfoConnector
-  def get_weatherinfo
+  def get_weatherinfo(pref, area, url, xpath, set_day)
     # URIをparse(解析)
     uri = URI.parse(url)
     # ウェブサーバからドキュメントを得る (GET)
