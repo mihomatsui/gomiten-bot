@@ -35,7 +35,16 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         # 文字列が入力された場合
-
+        case event.message['text']
+        when /.*(1|１|スタート).*/
+          $db.notification_enable_user(user_id)
+          info = $db.get_notifications(user_id)
+          reply_text = %{#{info['pref']} #{info['area']} の天気をお知らせします！}
+          reply_text << "\n\nお知らせを停止するときは「2」または「ストップ」と入力してください。\n\n地域を設定するときは 位置情報 を送信してください。"
+        when /.*(2|２|ストップ).*/
+          $db.notification_disnable_user(user_id)
+          reply_text = "お知らせの停止を受け付けました。\n\nお知らせを開始するときは「1」または「スタート」と入力してください。\n\n使い方を見たい場合は何か話しかけてください。"
+        end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         
