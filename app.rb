@@ -4,6 +4,7 @@ Bundler.require
 require 'sinatra/reloader' if development?
 require './weather_db_connector'
 require './weather_info_connector'
+require 'date'
 
 $db = WeatherDbConnector.new
 
@@ -44,6 +45,33 @@ post '/callback' do
         when /.*(2|２|ストップ).*/
           $db.notification_disnable_user(user_id)
           reply_text = "お知らせの停止を受け付けました。\n\nお知らせを開始するときは「1」または「スタート」と入力してください。\n\n使い方を見たい場合は何か話しかけてください。"
+        when /.*(3|３|天気|てんき).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            info = $db.get_notifications(user_id)
+            reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 0)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 0) #名古屋駅
+            p e
+          end
+        when /.*(明日|あした).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            info = $db.get_notifications(user_id)
+            reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 1)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 1) 
+            p e
+          end
+        when /.*(明後日|あさって).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            info = $db.get_notifications(user_id)
+            reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 2)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 2) 
+            p e
+          end  
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
@@ -54,9 +82,7 @@ post '/callback' do
         puts "緯度と経度を取得しました！"
         pref, area = $db.set_location(user_id, latitude, longitude)
         reply_text = %{地域を#{pref} #{area}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
-        
       end
-
     end
     message = {
           type: "text",

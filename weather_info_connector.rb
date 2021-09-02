@@ -6,7 +6,7 @@ require 'rexml/document'
 # weather = WeatherInfoConnector.new('愛知県', '西部', 'http://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', 0)
 
 class WeatherInfoConnector
-  def get_weatherinfo
+  def get_weatherinfo(pref, area, url, xpath, set_day)
     # URIをparse(解析)
     uri = URI.parse(url)
     # ウェブサーバからドキュメントを得る (GET)
@@ -25,30 +25,30 @@ class WeatherInfoConnector
     when 2
       fix_xpath = xpath + '/info[3]' # 明後日
     else
-      fix_xpath = xpath + '/info[0]' # 今日
+      fix_xpath = xpath + '/info[1]' # 今日
     end
 
-    date = doc.elements['fix_xpath'].attributes['date'] # 日時
-    weather = doc.elements['fix_xpath' + '/weather'].text  # 天気
-    max = doc.elements['fix_xpath' + '/temperature/range[1]'].text # 最高温
-    min = doc.elements['fix_xpath' + '/temperature/range[2]'].text # 最低気温
+    date = doc.elements[fix_xpath].attributes['date']
+    weather = doc.elements[fix_xpath + '/weather'].text  # 天気
+    max = doc.elements[fix_xpath + '/temperature/range[1]'].text # 最高温
+    min = doc.elements[fix_xpath + '/temperature/range[2]'].text # 最低気温
     # 降水確率
-    per00to06 = doc.elements['fix_xpath' + '/rainfallchance/period[1]'].text  
-    per06to12 = doc.elements['fix_xpath' + '/rainfallchance/period[2]'].text
-    per12to18 = doc.elements['fix_xpath' + '/rainfallchance/period[3]'].text
-    per18to24 = doc.elements['fix_xpath' + '/rainfallchance/period[4]'].text
+    per00to06 = doc.elements[fix_xpath + '/rainfallchance/period[1]'].text  
+    per06to12 = doc.elements[fix_xpath + '/rainfallchance/period[2]'].text
+    per12to18 = doc.elements[fix_xpath + '/rainfallchance/period[3]'].text
+    per18to24 = doc.elements[fix_xpath + '/rainfallchance/period[4]'].text
     # メッセージ送信で使用するためテキストを取得
-    text00to06 = doc.elements['fix_xpath' + "/rainfallchance/period[1]"].attributes['hour'] 
-    text06to12 = doc.elements["fix_xpath" + "/rainfallchance/period[2]"].attributes["hour"]
-    text12to18 = doc.elements["fix_xpath" + "/rainfallchance/period[3]"].attributes["hour"]
-    text18to24 = doc.elements["fix_xpath" + "/rainfallchance/period[4]"].attributes["hour"]
+    text00to06 = doc.elements[fix_xpath + '/rainfallchance/period[1]'].attributes['hour'] 
+    text06to12 = doc.elements[fix_xpath + '/rainfallchance/period[2]'].attributes['hour']
+    text12to18 = doc.elements[fix_xpath + '/rainfallchance/period[3]'].attributes['hour']
+    text18to24 = doc.elements[fix_xpath + '/rainfallchance/period[4]'].attributes['hour']
     
     # Botでメッセージを表示する
     message = ''
     message << %{#{pref} #{area} の#{date} の天気は #{weather}\n\n}
     message << %{最高気温 #{max}℃\n}
     message << %{最低気温 #{min}℃\n\n}
-    message << %{降水確率 #{text00to06}:#{per00to06}%,#{text06to12}:#{per06to12}%,#{text12to18}:#{per12to18}%,#{text18to24}:#{per18to24}%}
+    message << %{降水確率\n#{text00to06}時:#{per00to06}%,#{text06to12}時:#{per06to12}%,\n#{text12to18}時:#{per12to18}%,#{text18to24}時:#{per18to24}%}
     return message
   end  
 end
