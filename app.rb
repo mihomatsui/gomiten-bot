@@ -45,17 +45,35 @@ post '/callback' do
         when /.*(2|２|ストップ).*/
           $db.notification_disnable_user(user_id)
           reply_text = "お知らせの停止を受け付けました。\n\nお知らせを開始するときは「1」または「スタート」と入力してください。\n\n使い方を見たい場合は何か話しかけてください。"
-        when /.*(3|３|天気).*/
+        when /.*(3|３|天気|てんき).*/
           weather_info_conn = WeatherInfoConnector.new
           begin
             info = $db.get_notifications(user_id)
             reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 0)
           rescue => e
-            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 1) #名古屋駅
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 0) #名古屋駅
             p e
           end
+        when /.*(明日|あした).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            info = $db.get_notifications(user_id)
+            reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 1)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 1) 
+            p e
+          end
+        when /.*(明後日|あさって).*/
+          weather_info_conn = WeatherInfoConnector.new
+          begin
+            info = $db.get_notifications(user_id)
+            reply_text = weather_info_conn.get_weatherinfo(info['pref'], info['area'], info['url'].sub(/http/, 'https'), info['xpath'], set_day = 2)
+          rescue => e
+            reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 2) 
+            p e
+          end  
         end
-      when Line::Bot::Event::MessageType::Location
+      when Line::Bot::Evqent::MessageType::Location
         # 位置情報が入力された場合
         
         # 緯度と経度を取得
