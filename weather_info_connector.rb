@@ -48,7 +48,7 @@ class WeatherInfoConnector
     message << %{#{pref} #{area} の#{date} の天気は #{weather}\n\n}
     message << %{最高気温 #{max}℃\n}
     message << %{最低気温 #{min}℃\n\n}
-    message << %{降水確率 #{text00to06}:#{per00to06}%,#{text06to12}:#{per06to12}%,#{text12to18}:#{per12to18}%,#{text18to24}:#{per18to24}%}
+    message << %{降水確率 #{text00to06}時:#{per00to06}%,#{text06to12}時:#{per06to12}%,#{text12to18}時:#{per12to18}%,#{text18to24}時:#{per18to24}%}
     return message
   end  
 end
