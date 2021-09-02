@@ -2,6 +2,10 @@ require 'active_record'
 require 'dotenv/load'
 
 class WeatherDbConnector
+  DEFAULT_WEATHER_HOUR = 7
+  DEFAULT_WEATHER_MINUTE = 0
+  DEFAULT_AREA_ID = 1
+
   # 環境変数を使って接続する
   ActiveRecord::Base.establish_connection(
     adapter: ENV['myadapter'],
@@ -31,6 +35,12 @@ class WeatherDbConnector
       createsql = f.read
       @conn.execute(createsql)
     end
+
+    p 'create_notifications_table'
+    File.open('notification.sql', 'r:utf-8') do |f|
+      notificationsql = f.read
+      @conn.execute(notificationsql)
+    end
   end
 
   def insert_weathers
@@ -44,14 +54,50 @@ class WeatherDbConnector
 
   def drop_weathers
     p 'drop_weathers_table'
-    weathers = Weather.table_name
-    @conn.drop_table(weathers)
+    @conn.execute("drop table if exists weathers")
+    @conn.execute("drop table if exists notifications")
+  end
+
+  def notification_enable_user(user_id)
+    p 'enable_user'
+    @conn.execute("insert into notifications (user_id, hour, minute, area_id, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, false) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notification_disabled = excluded.notification_disabled;")
+  end
+
+  def notification_disnable_user(user_id)
+    p 'disnable_user'
+    @conn.execute("insert into notifications (user_id, hour,minute, area_id, notification_disabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notification_disabled = excluded.notification_disabled;")
   end
 
   def set_location(user_id, latitude, longitude)
     p 'set_location'
     result = @conn.execute("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result['id']},#{result['pref']},#{result['area']},#{result['latitude']},#{result['longitude']}"
-    return result['pref'], result['area']
+    puts "#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}"
+    @conn.execute("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict(user_id) do update set area_id = ('#{result["id"]}')")
+    return result["pref"], result["area"]
+  end
+
+  def get_all_notifications
+   p 'get_all_notifications'
+   results = @conn.execute('select * from notifications inner join weathers on notifications.area_id = weathers.id;')
+   results.each do |row|
+    puts "----------------------------"
+    p row
+   end
+   return results
+  end
+
+  def get_notifications(user_id)
+    p 'get_notifications(user_id)'
+    results = @conn.execute("select * from notifications inner join weathers on notifications.area_id = weathers.id where notifications.user_id = '#{user_id}';")
+    results.each do |row|
+      puts "----------------------------"
+      p row
+    end
+    return results.first
+  end
+
+  def fix_notifications
+    p 'fix_notifications'
+    @conn.execute("update notifications set hour = 7, minute = 0 where hour is null")
   end
 end
