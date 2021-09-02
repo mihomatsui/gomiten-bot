@@ -25,7 +25,7 @@ class WeatherInfoConnector
     when 2
       fix_xpath = xpath + '/info[3]' # 明後日
     else
-      fix_xpath = xpath + '/info[0]' # 今日
+      fix_xpath = xpath + '/info[1]' # 今日
     end
 
     date = doc.elements['fix_xpath'].attributes['date'] # 日時
