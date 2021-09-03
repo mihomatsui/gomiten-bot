@@ -3,5 +3,5 @@ create table notifications (
   hour int,
   minute int,
   area_id int,
-  notification_disabled boolean default false
+  notificationDisabled boolean default false
 )
