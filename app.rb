@@ -19,6 +19,16 @@ end
 get '/send' do
   weather_info_conn = WeatherInfoConnector.new
   now_time = Time.now
+  begin
+    $db.get_all_notifications.each do |row|
+      if rom['notification_disabled'] == false then
+        hour = row['hour'] || 7
+        minute = row['minute'] || 0
+      end
+    end
+  rescue
+  end
+  "OK"
 end
 
 post '/callback' do
