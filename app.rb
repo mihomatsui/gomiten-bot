@@ -31,6 +31,7 @@ get '/send' do
         puts %{#{hour}:#{minute} - #{forecast}}
         message = { type: 'text', text: forecast }
         p 'push message'
+        p client.push_message(row['user_id'], message)
       end
     end
   rescue
