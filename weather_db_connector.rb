@@ -70,7 +70,7 @@ class WeatherDbConnector
 
   def set_time(user_id, hour, minute)
     p 'set_time'
-    @conn.execute("insert into notifications (user_id, hour,minute, area_id, notification_disabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
+    @conn.execute("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
   end
 
   def set_location(user_id, latitude, longitude)
