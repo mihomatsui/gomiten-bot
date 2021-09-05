@@ -4,7 +4,7 @@ Bundler.require
 require 'sinatra/reloader' if development?
 require './weather_db_connector'
 require './weather_info_connector'
-require 'date'
+
 
 $db = WeatherDbConnector.new
 
@@ -14,6 +14,29 @@ def client
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
     config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
   }
+end
+
+get '/send' do
+  weather_info_conn = WeatherInfoConnector.new
+  now_time = Time.now
+  begin
+    $db.get_all_notifications.each do |row|
+      if row['notificationDisabled'] == false then
+        hour = row['hour'] || 7
+        minute = row['minute'] || 0
+        next if hour != (now_time.hour + 9) % 24 # GMTからJISに変換 早期リターン
+        next if minute != now_time.min
+        set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
+        forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
+        puts %{#{hour}:#{minute} - #{forecast}}
+        message = { type: 'text', text: forecast }
+        p 'push message'
+        p client.push_message(row['user_id'], message)
+      end
+    end
+  rescue
+  end
+  "OK"
 end
 
 post '/callback' do
@@ -31,12 +54,17 @@ post '/callback' do
       reply_text << "・「1」または「スタート」と入力すると、毎日朝7時に天気、\n"
       reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
       reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
-      reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n"
+      reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
+      reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
         # 文字列が入力された場合
         case event.message['text']
+        when /([0-2][0-9])([0-5][0-9])/  #正規表現の後方参照を利用
+          hour, minute = $1.to_i, $2.to_i
+          $db.set_time(user_id, hour, minute)
+          reply_text = %{時刻を #{hour}時 #{minute} 分にセットしました！}
         when /.*(1|１|スタート).*/
           $db.notification_enable_user(user_id)
           info = $db.get_notifications(user_id)
