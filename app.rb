@@ -1,5 +1,6 @@
 require 'bundler/setup'
 Bundler.require
+require 'sinatra'
 # 開発環境のみオートリロードをつける
 require 'sinatra/reloader' if development?
 require './weather_db_connector'
