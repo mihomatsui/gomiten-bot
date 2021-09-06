@@ -7,16 +7,8 @@ class WeatherDbConnector
   DEFAULT_AREA_ID = 1
 
   # 環境変数を使って接続する
-  ActiveRecord::Base.establish_connection(
-    adapter: ENV['myadapter'],
-    host:    "",
-    username: ENV['myusername'],
-    password: ENV['mypassword'],
-    database: ENV['mydatabase']
-  )
-
-  # クラスを作成
   class Weather < ActiveRecord::Base
+    establish_connection(ENV['DATABASE_URL'])
   end
 
   def initialize
