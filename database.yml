@@ -1,0 +1,10 @@
+db:
+ production:
+ url: <%= ENV['DATABASE_URL'] %>
+
+ development:
+ adapter: ENV['myadapter']
+ host:    ""
+ username: ENV['myusername']
+ password: ENV['mypassword']
+ database: ENV['mydatabase']
