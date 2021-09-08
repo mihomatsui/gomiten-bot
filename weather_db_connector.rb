@@ -8,7 +8,7 @@ class WeatherDbConnector
 
   # 環境変数を使って接続する
   ActiveRecord::Base.establish_connection(
-    adapter: postgresql,
+    adapter: ENV.fetch("myadapter"),
     host: "",
     username: ENV.fetch("myusername"),
     password: ENV.fetch("mypassword"),
