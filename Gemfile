@@ -10,7 +10,6 @@ gem "sinatra"
 gem "dotenv"
 gem "line-bot-api"
 gem "pg"
-gem "activerecord"
 
 # 開発環境だけ
 group :development do
