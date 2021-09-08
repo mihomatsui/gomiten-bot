@@ -1,0 +1,12 @@
+db:
+  production:
+    url: <%= ENV['DATABASE_URL'] %>
+
+  development:
+    adapter: postgresql
+    host:    ""
+    username: testuser
+    password: <%= ENV['mypassword'] %>
+    database: weather
+
+  
