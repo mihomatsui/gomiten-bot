@@ -7,9 +7,12 @@ class WeatherDbConnector
   DEFAULT_AREA_ID = 1
 
   # 環境変数を使って接続する
-  config = YAML.load_file('./database.yml')
   ActiveRecord::Base.establish_connection(
-    config["db"]["development"]
+    adapter: ENV.fetch("myadapter"),
+    host: "",
+    username: ENV.fetch("myusername"),
+    password: ENV.fetch("mypassword"),
+    database: ENV.fetch("mydatabase")
   )
 
   class Weather < ActiveRecord::Base
