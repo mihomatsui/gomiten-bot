@@ -6,6 +6,11 @@ class WeatherDbConnector
   DEFAULT_WEATHER_MINUTE = 0
   DEFAULT_AREA_ID = 1
 
+  def initialize
+   connect
+   init
+  end
+
   # 環境変数を使って接続する
   def connect
     @@client = PG::Connection.new(
@@ -16,12 +21,10 @@ class WeatherDbConnector
     )
   end
   
-  def initialize
+  def init
     # 毎回リセットする
     drop_weathers
-    # テーブルの作成
     create_weathers
-    # データを挿入する
     insert_weathers
   end
 
