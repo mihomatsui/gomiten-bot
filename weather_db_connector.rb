@@ -16,9 +16,9 @@ class WeatherDbConnector
   def connect
     @@client = PG::Connection.new(
       :host => "",
-      :user => ENV("DB_USER"),
-      :password => ENV("DB_PASSWORD"),
-      :dbname => ENV("DB_NAME"),
+      :user => ENV["DB_USER"],
+      :password => ENV["DB_PASSWORD"],
+      :dbname => ENV["DB_NAME"]
     )
   end
   
