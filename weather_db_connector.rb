@@ -1,5 +1,6 @@
-require 'dotenv/load'
+require 'dotenv'
 require 'pg'
+Dotenv.load
 
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
@@ -15,9 +16,9 @@ class WeatherDbConnector
   def connect
     @@client = PG::Connection.new(
       :host => "",
-      :user => ENV.fetch("DB_USER"),
-      :password => ENV.fetch("DB_PASSWORD"),
-      :dbname => ENV.fetch("DB_NAME"),
+      :user => ENV["DB_USER"],
+      :password => ENV["DB_PASSWORD"],
+      :dbname => ENV["DB_NAME"]
     )
   end
   
