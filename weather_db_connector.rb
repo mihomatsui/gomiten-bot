@@ -1,5 +1,6 @@
 require 'dotenv'
 require 'pg'
+Dotenv.load
 
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
