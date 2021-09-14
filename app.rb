@@ -35,7 +35,15 @@ get '/send' do
         puts %{#{hour}:#{minute} - #{forecast}}
         message = { type: 'text', text: forecast }
         p 'push message'
-        p client.push_message(row['user_id'], message)
+
+        case forecast
+        when /.*(雨|雪).*/ 
+          message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
+          messages = [message, message_sticker]
+          p client.push_message(row['user_id'], messages)
+        else
+          p client.push_message(row['user_id'], message)
+        end
       end
     end
   rescue
