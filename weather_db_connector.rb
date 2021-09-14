@@ -9,12 +9,13 @@ class WeatherDbConnector
 
   
   def initialize
-    # 環境変数を使って接続する
-    @conn = PG.connect(
-      :host => "localhost",
-      :user => ENV["DB_USER"],
-      :password => ENV["DB_PASSWORD"],
-      :dbname => ENV["DB_NAME"]
+    uri = URI.parse(ENV['DATABASE_URL'])
+    @conn ||= PG::connect(
+      host: uri.hostname,
+      dbname: uri.path[1..-1],
+      user: uri.user,
+      port: uri.port,
+      password: uri.password
     )
     # 毎回リセットする
     drop_weathers
