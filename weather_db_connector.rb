@@ -9,13 +9,13 @@ class WeatherDbConnector
 
   
   def initialize
-    uri = URI.parse(ENV['DATABASE_URL'])
+    #uri = URI.parse(ENV['DATABASE_URL'])
     @conn ||= PG::connect(
-      host: uri.hostname,
-      dbname: uri.path[1..-1],
-      user: uri.user,
-      port: uri.port,
-      password: uri.password
+      host: ENV["DB_HOST"],
+      dbname: ENV["DB_NAME"],
+      user: ENV["DB_USER"],
+      port: ENV["DB_PORT"],
+      password: ENV["DB_PASSWORD"]
     )
     # 毎回リセットする
     drop_weathers
