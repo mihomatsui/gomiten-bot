@@ -16,3 +16,5 @@ group :development do
   gem "sinatra-contrib"
   gem "pry"
 end
+
+gem "charlock_holmes"
