@@ -18,3 +18,4 @@ group :development do
 end
 
 gem "charlock_holmes"
+gem "roo", "~> 2.8.0"
