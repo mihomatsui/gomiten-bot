@@ -28,8 +28,9 @@ end
 # ヘッダーを置換してidを挿入する
 tbl = CSV.table('select-ken-all.csv', 
   header_converters: lambda {|h| 
-    h == 'government_code' ? 'id' : h
-})
+    h == 'government_code' ? 'id' : h},
+  :converters => nil
+  )
 tbl.each_with_index{|row, i| row['id'] = i}
 file_path = 'index-select-ken-all.csv'
 File.open(file_path, 'wb') {|f| f.puts(tbl.to_csv)}
