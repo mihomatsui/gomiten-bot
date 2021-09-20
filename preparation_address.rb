@@ -24,3 +24,12 @@ CSV.open("select-ken-all.csv","w") do |out|
     out << row.values_at(*COLS)
   end
 end
+
+# ヘッダーを置換してidを挿入する
+tbl = CSV.table('select-ken-all.csv', 
+  header_converters: lambda {|h| 
+    h == 'government_code' ? 'id' : h
+})
+tbl.each_with_index{|row, i| row['id'] = i}
+file_path = 'index-select-ken-all.csv'
+File.open(file_path, 'wb') {|f| f.puts(tbl.to_csv)}
