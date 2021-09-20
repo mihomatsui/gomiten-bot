@@ -14,5 +14,13 @@ end
 # 生成したCSVデータを読み込む
 # CSV.foreachの引数にheaders: trueとつけて先頭行をヘッダとして認識する
 CSV.foreach("head-x-ken-all.csv", headers: true) do |row|
-  p row.to_h
+  #p row.to_h
+end
+
+# 一部のデータだけ抜き出す
+COLS=[3,*(7..9)].map{|x| x-1}
+CSV.open("select-ken-all.csv","w") do |out|
+  CSV.foreach("head-x-ken-all.csv")  do |row|
+    out << row.values_at(*COLS)
+  end
 end
