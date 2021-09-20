@@ -18,7 +18,7 @@ CSV.foreach("head-x-ken-all.csv", headers: true) do |row|
 end
 
 # 一部のデータだけ抜き出す
-COLS=[3,*(7..9)].map{|x| x-1}
+COLS=[1,3,*(7..9)].map{|x| x-1}
 CSV.open("select-ken-all.csv","w") do |out|
   CSV.foreach("head-x-ken-all.csv")  do |row|
     out << row.values_at(*COLS)
