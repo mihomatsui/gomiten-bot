@@ -21,6 +21,9 @@ class WeatherDbConnector
     drop_weathers
     create_weathers
     insert_weathers
+    drop_addresses
+    create_addresses
+    insert_addresses
   end
 
   def create_weathers
@@ -50,6 +53,27 @@ class WeatherDbConnector
     p 'drop_weathers_table'
     @conn.exec("drop table if exists weathers")
     @conn.exec("drop table if exists notifications")
+  end
+
+  def create_addresses
+    p "create_addresses_table"
+    File.open("create_addresses.sql", "r:utf-8") do |f|
+      createsql = f.read
+      @conn.exec(createsql)
+    end
+  end
+
+  def insert_addresses
+    p "insert_addresses_table"
+    File.open("insert_addresses.sql", "r:utf-8") do |f|
+      createsql = f.read
+      @conn.exec(createsql)
+    end
+  end
+
+  def drop_addresses
+    p "drop_addresses_table"
+    @conn.exec("drop table if exists addresses")
   end
 
   def notification_enable_user(user_id)
