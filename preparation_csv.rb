@@ -18,18 +18,18 @@ end
 
 # 一部のデータだけ抜き出す
 COLS = [1, 2, 4, *(6..8)].map { |x| x - 1 }
-CSV.open("head-select-address.csv", "w") do |out|
+CSV.open("select-address.csv", "w") do |out|
   CSV.foreach("head-address.csv") do |row|
     out << row.values_at(*COLS)
   end
 end
 
 # ヘッダーを置換してidを挿入する
-tbl = CSV.table("head-select-address.csv",
+tbl = CSV.table("select-address.csv",
                 header_converters: lambda { |h|
                   h == "prefcode" ? "id" : h
                 },
                 :converters => nil)
 tbl.each_with_index { |row, i| row["id"] = i }
-file_path = "index-head-select-address.csv"
+file_path = "insert-id-address.csv"
 File.open(file_path, "wb") { |f| f.puts(tbl.to_csv) }
