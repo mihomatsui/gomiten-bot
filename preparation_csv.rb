@@ -9,7 +9,7 @@ data = CSV.foreach("address.csv")
 deleted_data = CSV.read("address.csv").flatten[0]
 
 # CSVデータを生成する
-CSV.open('head-address.csv','w') do |csv|
+CSV.open('head_address.csv','w') do |csv|
   csv << header #ヘッダ行をCSVに追加
   data.each do |d|
     csv << d unless deleted_data.include?(d.first)
@@ -18,18 +18,18 @@ end
 
 # 一部のデータだけ抜き出す
 COLS = [1, 2, 4, *(6..8)].map { |x| x - 1 }
-CSV.open("select-address.csv", "w") do |out|
-  CSV.foreach("head-address.csv") do |row|
+CSV.open("select_address.csv", "w") do |out|
+  CSV.foreach("head_address.csv") do |row|
     out << row.values_at(*COLS)
   end
 end
 
 # ヘッダーを置換してidを挿入する
-tbl = CSV.table("select-address.csv",
+tbl = CSV.table("select_address.csv",
                 header_converters: lambda { |h|
                   h == "prefcode" ? "id" : h
                 },
                 :converters => nil)
 tbl.each_with_index { |row, i| row["id"] = i }
-file_path = "insert-id-address.csv"
+file_path = "insert_id_address.csv"
 File.open(file_path, "wb") { |f| f.puts(tbl.to_csv) }
