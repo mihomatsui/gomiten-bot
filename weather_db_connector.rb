@@ -66,9 +66,11 @@ class WeatherDbConnector
   def insert_addresses
     p 'insert_addresses_table'
     File.open('insert_addresses.sql', 'r:utf-8') do |f|
-      f.each_line do |addresssql|
-        @conn.exec(addresssql)
-      end
+      addresssql = f.read
+      @conn.exec(addresssql)
+      # f.each_line do |addresssql|
+      #   @conn.exec(addresssql)
+      # end
     end
   end
 
