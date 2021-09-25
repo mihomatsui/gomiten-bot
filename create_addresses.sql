@@ -4,5 +4,5 @@ create table addresses (
   municipalities varchar(32),
   townblock varchar(32),
   latitude numeric,
-  longitude numeric,
+  longitude numeric
 )
