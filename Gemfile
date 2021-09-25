@@ -16,6 +16,3 @@ group :development do
   gem "sinatra-contrib"
   gem "pry"
 end
-
-gem "charlock_holmes"
-gem "roo", "~> 2.8.0"
