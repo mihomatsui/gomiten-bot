@@ -29,12 +29,12 @@ class WeatherDbConnector
   def create_weathers
     p 'create_weathers_table'
     File.open('create_weathers.sql', 'r:utf-8') do |f|
-      createsql = f.read
-      @conn.exec(createsql)
+      weathersql = f.read
+      @conn.exec(weathersql)
     end
 
     p 'create_notifications_table'
-    File.open('notification.sql', 'r:utf-8') do |f|
+    File.open('notifications.sql', 'r:utf-8') do |f|
       notificationsql = f.read
       @conn.exec(notificationsql)
     end
@@ -43,8 +43,8 @@ class WeatherDbConnector
   def insert_weathers
     p 'insert_weathers_table'
     File.open('insert_weathers.sql', 'r:utf-8') do |f|
-      f.each_line do |createsql|
-        @conn.exec(createsql)
+      f.each_line do |weathersql|
+        @conn.exec(weathersql)
       end
     end
   end
@@ -58,16 +58,17 @@ class WeatherDbConnector
   def create_addresses
     p "create_addresses_table"
     File.open("create_addresses.sql", "r:utf-8") do |f|
-      createsql = f.read
-      @conn.exec(createsql)
+      addresssql = f.read
+      @conn.exec(addresssql)
     end
   end
 
   def insert_addresses
     p "insert_addresses_table"
     File.open("insert_addresses.sql", "r:utf-8") do |f|
-      createsql = f.read
-      @conn.exec(createsql)
+      f.each_line do |addresssql|
+        @conn.exec(addresssql)
+      end
     end
   end
 
