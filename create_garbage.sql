@@ -3,6 +3,6 @@ create table garbage (
   address_id int references addresses(id),
   week int,
   wday int,
-  category int
+  category_id int references category(id)
 )
 
