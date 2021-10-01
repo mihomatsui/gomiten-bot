@@ -1,6 +1,6 @@
-require './app'
+require './app.rb'
 
-# Heroku Schedulerで実行する処理
+# 定期実行する処理
 get '/send' do
   weather_info_conn = WeatherInfoConnector.new
   now_time = Time.now
