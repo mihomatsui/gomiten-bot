@@ -36,7 +36,7 @@ post '/callback' do
       reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
       reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
       reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
-      reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
+      #reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
@@ -85,12 +85,14 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
         
-        # 緯度と経度を取得
+        # 位置情報を取得
         latitude = event.message['latitude']
         longitude = event.message['longitude']
-        puts "緯度と経度を取得しました！"
-        pref, area = $db.set_location(user_id, latitude, longitude)
-        reply_text = %{地域を#{pref} #{area}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
+        puts "位置情報を取得しました！"
+        pref, area = $db.set_weather_location(user_id, latitude, longitude)
+        reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
+        pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
+        reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
     end
     message = {

@@ -5,7 +5,7 @@ Dotenv.load
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
-  DEFAULT_AREA_ID = 1
+  DEFAULT_AREA_ID = 73
 
   
   def initialize
@@ -17,21 +17,24 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    # 毎回リセットする
-    drop_weathers
+    # テーブルの準備
+    #drop_weathers
     create_weathers
     insert_weathers
+    #drop_addresses
+    create_addresses
+    insert_addresses
   end
 
   def create_weathers
     p 'create_weathers_table'
     File.open('create_weathers.sql', 'r:utf-8') do |f|
-      createsql = f.read
-      @conn.exec(createsql)
+      weathersql = f.read
+      @conn.exec(weathersql)
     end
 
     p 'create_notifications_table'
-    File.open('notification.sql', 'r:utf-8') do |f|
+    File.open('notifications.sql', 'r:utf-8') do |f|
       notificationsql = f.read
       @conn.exec(notificationsql)
     end
@@ -40,8 +43,8 @@ class WeatherDbConnector
   def insert_weathers
     p 'insert_weathers_table'
     File.open('insert_weathers.sql', 'r:utf-8') do |f|
-      f.each_line do |createsql|
-        @conn.exec(createsql)
+      f.each_line do |weathersql|
+        @conn.exec(weathersql)
       end
     end
   end
@@ -50,6 +53,30 @@ class WeatherDbConnector
     p 'drop_weathers_table'
     @conn.exec("drop table if exists weathers")
     @conn.exec("drop table if exists notifications")
+  end
+
+  def create_addresses
+    p 'create_addresses_table'
+    File.open('create_addresses.sql', 'r:utf-8') do |f|
+      addresssql = f.read
+      @conn.exec(addresssql)
+    end
+  end
+
+  def insert_addresses
+    p 'insert_addresses_table'
+    File.open('insert_addresses.sql', 'r:utf-8') do |f|
+      addresssql = f.read
+      @conn.exec(addresssql)
+      # f.each_line do |addresssql|
+      #   @conn.exec(addresssql)
+      # end
+    end
+  end
+
+  def drop_addresses
+    p "drop_addresses_table"
+    @conn.exec("drop table if exists addresses")
   end
 
   def notification_enable_user(user_id)
@@ -67,12 +94,20 @@ class WeatherDbConnector
     @conn.exec("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
   end
 
-  def set_location(user_id, latitude, longitude)
-    p 'set_location'
+  def set_weather_location(user_id, latitude, longitude)
+    p 'set_weather_location'
     result = @conn.exec("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}"
     @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
     return result["pref"], result["area"]
+  end
+
+  def set_garbage_location(user_id, latitude, longitude)
+    p 'set_garbage_location'
+    result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
+    puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
+    # @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
+    return result["pref"], result["municipalities"],result["townblock"]
   end
 
   def get_all_notifications
