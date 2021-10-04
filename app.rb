@@ -32,10 +32,9 @@ post '/callback' do
     when Line::Bot::Event::Message
       user_id = event['source']['userId']
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
-      reply_text << "・「1」または「スタート」と入力すると、毎日朝7時に天気、\n"
-      reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
-      reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
-      reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
+      reply_text << "・「スタート」と入力すると、毎日朝7時に天気をお知らせします。\n"
+      reply_text << "・「ストップ」と入力すると、停止します。\n\n"
+      reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
       #reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
       
       case event.type
@@ -46,15 +45,15 @@ post '/callback' do
           hour, minute = $1.to_i, $2.to_i
           $db.set_time(user_id, hour, minute)
           reply_text = %{時刻を #{hour}時 #{minute} 分にセットしました！}
-        when /.*(1|１|スタート).*/
+        when /.*(スタート).*/
           $db.notification_enable_user(user_id)
           info = $db.get_notifications(user_id)
           reply_text = %{#{info['pref']} #{info['area']} の天気をお知らせします！}
           reply_text << "\n\nお知らせを停止するときは「2」または「ストップ」と入力してください。\n\n地域を設定するときは 位置情報 を送信してください。"
-        when /.*(2|２|ストップ).*/
+        when /.*(ストップ).*/
           $db.notification_disnable_user(user_id)
           reply_text = "お知らせの停止を受け付けました。\n\nお知らせを開始するときは「1」または「スタート」と入力してください。\n\n使い方を見たい場合は何か話しかけてください。"
-        when /.*(3|３|天気|てんき).*/
+        when /.*(天気|てんき).*/
           weather_info_conn = WeatherInfoConnector.new
           begin
             info = $db.get_notifications(user_id)
@@ -92,7 +91,7 @@ post '/callback' do
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
         pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
-        reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
+        #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！\n\n「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
     end
     message = {
