@@ -1,1 +1,0 @@
-`bundle exec clock.rb;`
