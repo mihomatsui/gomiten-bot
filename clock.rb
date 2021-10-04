@@ -1,5 +1,5 @@
 require 'clockwork'
-require './minute_job'
+require './hour_job'
 
 module Clockwork
   handler do |job|
