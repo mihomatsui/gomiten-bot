@@ -1,10 +1,10 @@
-require './app'
-
-# Heroku Schedulerで実行する処理
-get '/send' do
-  weather_info_conn = WeatherInfoConnector.new
-  now_time = Time.now
-  begin
+class HourJob
+  # 指定時間に実行
+  def call
+    require './app.rb'
+    weather_info_conn = WeatherInfoConnector.new
+    now_time = Time.now
+    begin
     $db.get_all_notifications.each do |row|
       if row['notificationDisabled'] == false then
         hour = row['hour'] || 7
@@ -16,7 +16,7 @@ get '/send' do
         puts %{#{hour}:#{minute} - #{forecast}}
         message = { type: 'text', text: forecast }
         p 'push message'
-
+      
         case forecast
         when /.*(雨|雪).*/ 
           message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
@@ -24,11 +24,12 @@ get '/send' do
           p client.push_message(row['user_id'], messages)
         else
           p client.push_message(row['user_id'], message)
-        end
+        end  
       end
     end
-  rescue
+    rescue => e
+      p e
+    end
+    "OK"
   end
-  "OK"
 end
-puts 'done.'

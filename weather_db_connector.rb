@@ -5,7 +5,7 @@ Dotenv.load
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
-  DEFAULT_AREA_ID = 1
+  DEFAULT_AREA_ID = 73
 
   
   def initialize
@@ -17,11 +17,11 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    # 毎回リセットする
-    drop_weathers
+    # テーブルの準備
+    #drop_weathers
     create_weathers
     insert_weathers
-    drop_addresses
+    #drop_addresses
     create_addresses
     insert_addresses
   end
@@ -106,7 +106,7 @@ class WeatherDbConnector
     p 'set_garbage_location'
     result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
-    @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
+    # @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
     return result["pref"], result["municipalities"],result["townblock"]
   end
 
