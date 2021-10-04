@@ -8,7 +8,6 @@ if development?
 end
 require './weather_db_connector'
 require './weather_info_connector'
-require './command'
 
 
 $db = WeatherDbConnector.new
