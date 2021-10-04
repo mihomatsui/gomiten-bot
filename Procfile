@@ -1,1 +1,1 @@
-web: bundle exec ruby app.rb -p $PORT
+cron: bundle exec clockwork clock.rb
