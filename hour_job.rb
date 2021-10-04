@@ -1,7 +1,7 @@
 class HourJob
   # 指定時間に実行
   def call
-    require './app.rb'
+    require './app'
     weather_info_conn = WeatherInfoConnector.new
     now_time = Time.now
     begin
