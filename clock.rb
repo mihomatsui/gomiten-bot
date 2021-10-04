@@ -6,6 +6,8 @@ module Clockwork
     job.call
   end
 
-  every(30.minutes, HourJob.new, :thread => true)
+  #7時より前に実行してスリープを解除する
+  every(1.hour, HourJob.new, :thread => true, at: '6:30') { sleep 30 }
+  every(1.hour, HourJob.new, :thread => true, at: '7:00')
 end
 
