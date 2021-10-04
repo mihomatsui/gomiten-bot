@@ -1,5 +1,5 @@
-class MinuteJob
-  # 30分ごとの処理
+class HourJob
+  # 指定時間に実行
   def call
     require './app.rb'
     weather_info_conn = WeatherInfoConnector.new

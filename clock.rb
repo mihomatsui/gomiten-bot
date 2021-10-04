@@ -6,6 +6,6 @@ module Clockwork
     job.call
   end
 
-  every(30.minutes, MinuteJob.new, :thread => true)
+  every(30.minutes, HourJob.new, :thread => true)
 end
 
