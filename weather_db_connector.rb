@@ -17,11 +17,11 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    # 毎回リセットする
-    drop_weathers
+    # テーブルの準備
+    #drop_weathers
     create_weathers
     insert_weathers
-    drop_addresses
+    #drop_addresses
     create_addresses
     insert_addresses
   end
