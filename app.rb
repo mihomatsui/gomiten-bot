@@ -36,7 +36,7 @@ post '/callback' do
       reply_text << "  夜の21時に翌日のゴミの収集日をお知らせします。\n\n"
       reply_text << "・「2」または「ストップ」と入力すると、停止します。\n\n"
       reply_text << "・「3」または「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
-      reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
+      #reply_text << "・通知の時刻を7時から変更したいときは、半角数字4桁で時刻を入力してください。例:朝8時→0800"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
