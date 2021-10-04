@@ -5,7 +5,7 @@ Dotenv.load
 class WeatherDbConnector
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
-  DEFAULT_AREA_ID = 1
+  DEFAULT_AREA_ID = 73
 
   
   def initialize
