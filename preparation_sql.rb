@@ -1,6 +1,6 @@
 require "csv"
 # insert文を生成
-reader = CSV.open("insert_id_address.csv", "r")
+reader = CSV.open("renumber_id_nagoya.csv", "r")
 reader.shift
 
 sql = "insert into addresses (id, pref, municipalities, townblock, latitude, longitude) values \n"
