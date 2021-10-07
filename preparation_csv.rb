@@ -33,3 +33,22 @@ tbl = CSV.table("select_address.csv",
 tbl.each_with_index { |row, i| row["id"] = i }
 file_path = "insert_id_address.csv"
 File.open(file_path, "wb") { |f| f.puts(tbl.to_csv) }
+
+# 名古屋を含むデータだけ抜き出す
+short_header = ["all_id", "pref", "municipalities", "townblock", "latitude", "longitude"]
+CSV.open("nagoya.csv", "w") do |out|
+  out << short_header
+  CSV.foreach("insert_id_address.csv") do |row|
+    out << row if row[2].include?("名古屋")
+  end
+end
+
+# idを再度振る
+nagoya_tbl = CSV.table("nagoya.csv",
+                header_converters: lambda { |h|
+                  h == "all_id" ? "id" : h
+                },
+                :converters => nil)
+nagoya_tbl.each_with_index { |row, i| row["id"] = i }
+file_path = "renumber_id_nagoya.csv"
+File.open(file_path, "wb") { |f| f.puts(nagoya_tbl.to_csv) }
