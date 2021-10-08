@@ -9,14 +9,7 @@ class WeatherDbConnector
 
   
   def initialize
-    #uri = URI.parse(ENV['DATABASE_URL'])
-    @conn ||= PG::connect(
-      host: ENV["DB_HOST"],
-      dbname: ENV["DB_NAME"],
-      user: ENV["DB_USER"],
-      port: ENV["DB_PORT"],
-      password: ENV["DB_PASSWORD"]
-    )
+    connect
     # テーブルの準備
     drop_weathers
     create_weathers
@@ -24,6 +17,16 @@ class WeatherDbConnector
     drop_addresses
     create_addresses
     insert_addresses
+  end
+
+    def connect
+      @conn = PG::connect(
+        host: ENV["DB_HOST"],
+        dbname: ENV["DB_NAME"],
+        user: ENV["DB_USER"],
+        port: ENV["DB_PORT"],
+        password: ENV["DB_PASSWORD"],
+      )
   end
 
   def create_weathers
