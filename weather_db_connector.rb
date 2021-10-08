@@ -13,7 +13,7 @@ class WeatherDbConnector
       dbname: ENV["DB_NAME"],
       user: ENV["DB_USER"],
       port: ENV["DB_PORT"],
-      password: ENV["DB_PASSWORD"],
+      password: ENV["DB_PASSWORD"]
     )
     result = @conn.exec("select table_name from information_schema.tables where table_schema = '#{ENV["DB_NAME"]}';")
     init if result.count == 0
