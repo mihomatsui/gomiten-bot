@@ -7,47 +7,39 @@ class WeatherDbConnector
   DEFAULT_WEATHER_MINUTE = 0
   DEFAULT_AREA_ID = 73
 
-  
   def initialize
-    connect
-    # テーブルの準備
-    drop_weathers
-    create_weathers
-    insert_weathers
-    drop_addresses
-    create_addresses
-    insert_addresses
+    @conn = PG::connect(
+      host: ENV["DB_HOST"],
+      dbname: ENV["DB_NAME"],
+      user: ENV["DB_USER"],
+      port: ENV["DB_PORT"],
+      password: ENV["DB_PASSWORD"],
+    )
+    result = @conn.exec("select table_name from information_schema.tables where table_schema = '#{ENV["DB_NAME"]}';")
+    init if result.count == 0
   end
-
-    def connect
-      @conn = PG::connect(
-        host: ENV["DB_HOST"],
-        dbname: ENV["DB_NAME"],
-        user: ENV["DB_USER"],
-        port: ENV["DB_PORT"],
-        password: ENV["DB_PASSWORD"],
-      )
-  end
-
-  def create_weathers
-    p 'create_weathers_table'
-    File.open('create_weathers.sql', 'r:utf-8') do |f|
-      weathersql = f.read
-      @conn.exec(weathersql)
-    end
-
-    p 'create_notifications_table'
-    File.open('notifications.sql', 'r:utf-8') do |f|
-      notificationsql = f.read
-      @conn.exec(notificationsql)
-    end
-  end
-
-  def insert_weathers
-    p 'insert_weathers_table'
-    File.open('insert_weathers.sql', 'r:utf-8') do |f|
-      f.each_line do |weathersql|
+  
+  def init
+    def create_table
+      p "create_weathers_table"
+      File.open("create_weathers.sql", "r:utf-8") do |f|
+        weathersql = f.read
         @conn.exec(weathersql)
+      end
+
+      p "create_notifications_table"
+      File.open("notifications.sql", "r:utf-8") do |f|
+        notificationsql = f.read
+        @conn.exec(notificationsql)
+      end
+    end
+
+    def insert_weathers
+      p "insert_weathers_table"
+      File.open("insert_weathers.sql", "r:utf-8") do |f|
+        f.each_line do |weathersql|
+          @conn.exec(weathersql)
+        end
       end
     end
   end
