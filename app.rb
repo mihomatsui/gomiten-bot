@@ -12,6 +12,10 @@ require './weather_info_connector'
 
 $db = WeatherDbConnector.new
 
+get '/' do
+  erb :index
+end
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -102,7 +106,4 @@ post '/callback' do
     client.reply_message(event["replyToken"], message)
   end
   "OK"
-end
-get '/' do
-  "Hello world!"
 end
