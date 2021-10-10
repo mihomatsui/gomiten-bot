@@ -1,5 +1,6 @@
+ENV["RACK_ENV"] ||= 'development'
 require 'bundler/setup'
-Bundler.require
+Bundler.require(:default, ENV["RACK_ENV"])
 require 'sinatra'
 # 開発環境のみ使用
 if development?
@@ -8,6 +9,25 @@ if development?
 end
 require './weather_db_connector'
 require './weather_info_connector'
+
+
+  configure do
+    # Railsのデフォルトに合わせ、application.js/cssが生成されるように設定
+    set :assets_precompile, %w(application.js application.css *png *.jpg *.svg *.eot *.ttf *.woff)
+    # CSSとJSを圧縮する
+    set :assets_css_compressor, :sass
+    set :assets_js_compressor, :uglifier
+    register Sinatra::AssetPipeline
+  
+    # Rails Assetsに対応
+    if defined?(RailsAssets)
+      RailsAssets.load_paths.each { |path| settings.sprockets.append_path(path)}
+    end
+  end
+
+  get '/' do
+    erb :index
+  end
 
 
 $db = WeatherDbConnector.new
@@ -102,7 +122,4 @@ post '/callback' do
     client.reply_message(event["replyToken"], message)
   end
   "OK"
-end
-get '/' do
-  "Hello world!"
 end
