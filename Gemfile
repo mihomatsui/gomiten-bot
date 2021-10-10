@@ -7,7 +7,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 # gem "rails"
 
-gem "sinatra", require: "sinatra/base"
+gem "sinatra"
 gem "dotenv"
 gem "line-bot-api"
 gem "pg"
@@ -16,6 +16,8 @@ gem "clockwork"
 gem "sinatra-asset-pipeline", require: "sinatra/asset_pipeline"
 # JavaScriptの圧縮に必要
 gem "uglifier"
+
+#gem "compass"
 
 gem "rake"
 # Rails Assetsの中にRails以外でも使いやすくする変更があるので導入

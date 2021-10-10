@@ -10,7 +10,7 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 
-class App < Sinatra::Base
+
   configure do
     # Railsのデフォルトに合わせ、application.js/cssが生成されるように設定
     set :assets_precompile, %w(application.js application.css *png *.jpg *.svg *.eot *.ttf *.woff)
@@ -18,17 +18,17 @@ class App < Sinatra::Base
     set :assets_css_compressor, :sass
     set :assets_js_compressor, :uglifier
     register Sinatra::AssetPipeline
-  end
   
-  # Rails Assetsに対応
-  if defined?(RailsAssets)
-    RailsAssets.load_paths.each { |path| settings.sprockets.append_path(path)}
+    # Rails Assetsに対応
+    if defined?(RailsAssets)
+      RailsAssets.load_paths.each { |path| settings.sprockets.append_path(path)}
+    end
   end
 
   get '/' do
     erb :index
   end
-end
+
 
 $db = WeatherDbConnector.new
 
