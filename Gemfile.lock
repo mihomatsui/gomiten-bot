@@ -94,6 +94,7 @@ DEPENDENCIES
   pg
   pry
   rails-assets-normalize.css
+  rake
   sinatra
   sinatra-asset-pipeline
   sinatra-contrib
