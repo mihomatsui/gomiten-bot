@@ -1,9 +1,5 @@
 require 'bundler/setup'
 require 'sinatra'
-#-o [ipアドレス]オプションを不要にする
-set :environment, :production
-# publicをmystaticに変更する
-set :public_folder, File.dirname(__FILE__) + '/mystatic'
 
 # 開発環境のみ使用
 if development?
