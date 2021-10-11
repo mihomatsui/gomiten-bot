@@ -1,0 +1,14 @@
+/*
+ *= require_self
+ *= require_tree . 
+ */
+.container {
+  background: red;
+  width: 400px;
+  height: 400px; }
+  .container p {
+    color: white;
+    font-weight: bold;
+    text-align: center; }
+
+/*# sourceMappingURL=application.css.map */
