@@ -2,3 +2,6 @@
 /.env
 # フォルダごと外す
 /gitignore_csv/
+# 拡張子を無視する
+*.map
+*.sass-cache
