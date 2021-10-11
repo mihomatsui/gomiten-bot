@@ -1,0 +1,16 @@
+/*
+ *= require_self
+ *= require_tree . 
+ */
+
+ @import 'bootstrap/scss/bootstrap';
+ .container {
+  background: red;
+  width: 400px;
+  height: 400px;
+  p {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+}
