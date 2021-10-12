@@ -1,4 +1,5 @@
 require 'bundler/setup'
+Bundler.require
 require 'sinatra'
 
 # 開発環境のみ使用
