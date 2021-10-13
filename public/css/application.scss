@@ -2,13 +2,7 @@
  *= require_self
  *= require_tree . 
  */
- .container {
-  background: red;
-  width: 400px;
-  height: 400px;
-  p {
-    color: white;
-    font-weight: bold;
-    text-align: center;
-  }
+
+.fixed-top {
+  background-color: #CAE4DB;
 }
