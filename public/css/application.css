@@ -1,8 +1,23 @@
-/*
- *= require_self
- *= require_tree . 
- */
-.fixed-top {
-  background-color: #CAE4DB; }
+a:hover {
+  text-decoration: none; }
+
+.base-container {
+  margin: 0 auto;
+  padding: 1rem; }
+
+.mw-md {
+  max-width: 720px; }
+
+.mw-lg {
+  max-width: 960px; }
+
+.mw-xl {
+  max-width: 1200px; }
+
+body {
+  padding-top: 51px; }
+
+.base-bg-color {
+  background: #CAE4DB; }
 
 /*# sourceMappingURL=application.css.map */
