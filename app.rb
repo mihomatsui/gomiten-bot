@@ -10,7 +10,7 @@ require './weather_db_connector'
 require './weather_info_connector'
 
 get '/' do
-  erb :index
+  erb :top
 end
 
 $db = WeatherDbConnector.new
