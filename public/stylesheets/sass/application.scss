@@ -1,0 +1,35 @@
+// 共通
+a:hover {
+  text-decoration: none;
+}
+
+.base-container {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+// max-width
+
+.mw-md {
+  max-width: 720px;
+}
+
+.mw-lg {
+  max-width: 960px;
+}
+
+.mw-xl {
+  max-width: 1200px;
+}
+
+// ヘッダー
+body {
+  padding-top: 56px;
+}
+
+.base-bg-color {
+  background-color: #FEFFDB;
+  padding: 1rem;
+  width: 100%;
+}
+
