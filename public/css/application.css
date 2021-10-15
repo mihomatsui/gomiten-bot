@@ -15,9 +15,10 @@ a:hover {
   max-width: 1200px; }
 
 body {
-  padding-top: 51px; }
+  padding-top: 56px; }
 
 .base-bg-color {
-  background: #CAE4DB; }
+  background: #FEFFDB;
+  padding: 1rem; }
 
 /*# sourceMappingURL=application.css.map */
