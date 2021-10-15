@@ -1,0 +1,54 @@
+// 共通
+a:hover {
+  text-decoration: none;
+}
+
+.base-container {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+// max-width
+
+.mw-md {
+  max-width: 720px;
+}
+
+.mw-lg {
+  max-width: 960px;
+}
+
+.mw-xl {
+  max-width: 1200px;
+}
+
+// ヘッダー
+body {
+  padding-top: 70px;
+}
+
+.base-bg-color {
+  background-color: #ffC60B;
+}
+
+.header-nav {
+  font-size: 1.0rem;
+  margin: 0 auto;
+  word-break: keep-all;
+}
+
+.nav-item {
+  margin: 0 8px;
+}
+
+.wrap {
+  overflow: hidden;
+}
+
+// ロゴ画像
+.navbar-brand {
+  background: url("/image/logo.png") no-repeat left center;
+  background-size: contain;
+  height: 50px;
+  width: 200px;
+}

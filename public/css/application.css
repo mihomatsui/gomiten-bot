@@ -1,14 +1,24 @@
-/*
- *= require_self
- *= require_tree . 
- */
-.container {
-  background: red;
-  width: 400px;
-  height: 400px; }
-  .container p {
-    color: white;
-    font-weight: bold;
-    text-align: center; }
+a:hover {
+  text-decoration: none; }
+
+.base-container {
+  margin: 0 auto;
+  padding: 1rem; }
+
+.mw-md {
+  max-width: 720px; }
+
+.mw-lg {
+  max-width: 960px; }
+
+.mw-xl {
+  max-width: 1200px; }
+
+body {
+  padding-top: 56px; }
+
+.base-bg-color {
+  background: #FEFFDB;
+  padding: 1rem; }
 
 /*# sourceMappingURL=application.css.map */
