@@ -1,4 +1,5 @@
 require 'bundler/setup'
+Bundler.require
 require 'sinatra'
 
 # 開発環境のみ使用
@@ -8,9 +9,11 @@ if development?
 end
 require './weather_db_connector'
 require './weather_info_connector'
+require './helpers/application_helper'
 
+helpers ApplicationHelper
 get '/' do
-  erb :index
+  erb :top
 end
 
 $db = WeatherDbConnector.new
