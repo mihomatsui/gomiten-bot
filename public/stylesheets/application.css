@@ -1,40 +1,68 @@
 a:hover {
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 .base-container {
   margin: 0 auto;
-  padding: 1rem; }
+  padding: 1rem;
+}
 
 .mw-md {
-  max-width: 720px; }
+  max-width: 720px;
+}
 
 .mw-lg {
-  max-width: 960px; }
+  max-width: 960px;
+}
 
 .mw-xl {
-  max-width: 1200px; }
+  max-width: 1200px;
+}
 
 body {
-  padding-top: 70px; }
+  padding-top: 70px;
+}
 
 .base-bg-color {
-  background-color: #ffC60B; }
+  background-color: #ffC60B;
+}
 
 .header-nav {
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin: 0 auto;
-  word-break: keep-all; }
+  word-break: keep-all;
+}
 
 .nav-item {
-  margin: 0 8px; }
+  margin: 0 8px;
+}
 
 .wrap {
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .navbar-brand {
   background: url("/image/logo.png") no-repeat left center;
   background-size: contain;
   height: 50px;
-  width: 200px; }
+  width: 200px;
+}
 
+footer {
+  width: 100%;
+  height: 70px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+footer a {
+  padding: 0 auto;
+  font-size: 20px;
+}
 /*# sourceMappingURL=application.css.map */
