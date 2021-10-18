@@ -65,4 +65,13 @@ footer a {
   padding: 0 auto;
   font-size: 20px;
 }
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.title-heading {
+  text-align: center;
+}
 /*# sourceMappingURL=application.css.map */
