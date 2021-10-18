@@ -1,1 +1,1 @@
-cron: bundle exec clockwork clock.rb
+bundle exec app.rb
