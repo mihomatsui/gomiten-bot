@@ -32,4 +32,5 @@ class HourJob
     end
     "OK"
   end
+  puts "done."
 end
