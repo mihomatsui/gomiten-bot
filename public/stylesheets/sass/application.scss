@@ -93,6 +93,12 @@ footer {
   margin-top: 10px;
 }
 
+.img-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-img-top {
   width: 60%;
   margin: 0 auto;
