@@ -84,4 +84,9 @@ footer a {
 .container-m {
   margin-top: 80px;
 }
+
+.card-img-top {
+  width: 60%;
+  margin: 0 auto;
+}
 /*# sourceMappingURL=application.css.map */
