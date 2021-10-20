@@ -4,7 +4,6 @@ a:hover {
 
 .base-container {
   margin: 0 auto;
-  padding: 1rem;
 }
 
 .mw-md {
@@ -64,5 +63,66 @@ footer {
 footer a {
   padding: 0 auto;
   font-size: 20px;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-fukidashi {
+  width: 80%;
+  height: auto;
+  margin-top: 20px;
+}
+
+.img-qr {
+  width: 50%;
+  height: auto;
+}
+
+.img-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.container-m {
+  margin-top: 10px;
+}
+
+.img-card-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.card-img-top {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.section-bg {
+  background-color: #FFC60B;
+}
+
+section {
+  padding: 10px 0;
+}
+
+.section-title {
+  text-align: center;
 }
 /*# sourceMappingURL=application.css.map */
