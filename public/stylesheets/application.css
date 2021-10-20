@@ -4,7 +4,6 @@ a:hover {
 
 .base-container {
   margin: 0 auto;
-  padding: 1rem;
 }
 
 .mw-md {
@@ -74,6 +73,7 @@ footer a {
 .img-fukidashi {
   width: 80%;
   height: auto;
+  margin-top: 20px;
 }
 
 .img-qr {
@@ -81,12 +81,30 @@ footer a {
   height: auto;
 }
 
+.img-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .container-m {
-  margin-top: 80px;
+  margin-top: 10px;
 }
 
 .card-img-top {
   width: 60%;
   margin: 0 auto;
+}
+
+.section-bg {
+  background-color: #FFC60B;
+}
+
+section {
+  padding: 10px 0;
+}
+
+.section-title {
+  text-align: center;
 }
 /*# sourceMappingURL=application.css.map */
