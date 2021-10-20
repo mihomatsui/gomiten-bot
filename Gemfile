@@ -11,7 +11,6 @@ gem "sinatra"
 gem "dotenv"
 gem "line-bot-api"
 gem "pg"
-gem "clockwork"
 gem "sass"
 
 # 開発環境だけ

@@ -3,8 +3,10 @@ require 'pg'
 Dotenv.load
 
 class WeatherDbConnector
+  # 朝の7時
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
+  # 名古屋市西部
   DEFAULT_AREA_ID = 73
 
   def initialize
@@ -84,11 +86,6 @@ class WeatherDbConnector
     @conn.exec("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notificationDisabled = excluded.notificationDisabled;")
   end
 
-  def set_time(user_id, hour, minute)
-    p 'set_time'
-    @conn.exec("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
-  end
-
   def set_weather_location(user_id, latitude, longitude)
     p 'set_weather_location'
     result = @conn.exec("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
@@ -123,10 +120,5 @@ class WeatherDbConnector
       p row
     end
     return results.first
-  end
-
-  def fix_notifications
-    p 'fix_notifications'
-    @conn.exec("update notifications set hour = 7, minute = 0 where hour is null")
   end
 end
