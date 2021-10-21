@@ -92,7 +92,7 @@ post '/callback' do
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
         pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
-        #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
+        reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
     end
