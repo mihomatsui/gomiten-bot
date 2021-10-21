@@ -34,48 +34,37 @@ class WeatherDbConnector
         notificationsql = f.read
         @conn.exec(notificationsql)
       end
+
+      p "create_addresses_table"
+      File.open("create_addresses.sql", "r:utf-8") do |f|
+        addressessql = f.read
+        @conn.exec(addressessql)
+      end
     end
 
-    def insert_weathers
-      p "insert_weathers_table"
+    def insert_info
+      p "insert_weathers"
       File.open("insert_weathers.sql", "r:utf-8") do |f|
         f.each_line do |weathersql|
           @conn.exec(weathersql)
         end
       end
+
+      p "insert_addresses"
+      File.open("insert_addresses.sql", "r:utf-8") do |f|
+        addresssql = f.read
+        @conn.exec(addresssql)
+      end
     end
   end
 
-  def drop_weathers
-    p 'drop_weathers_table'
-    @conn.exec("drop table if exists weathers")
-    @conn.exec("drop table if exists notifications")
+  def drop_table
+      p "drop_table"
+      @conn.exec("drop table if exists weathers")
+      @conn.exec("drop table if exists notifications")
+      @conn.exec("drop table if exists addresses")
   end
-
-  def create_addresses
-    p 'create_addresses_table'
-    File.open('create_addresses.sql', 'r:utf-8') do |f|
-      addresssql = f.read
-      @conn.exec(addresssql)
-    end
-  end
-
-  def insert_addresses
-    p 'insert_addresses_table'
-    File.open('insert_addresses.sql', 'r:utf-8') do |f|
-      addresssql = f.read
-      @conn.exec(addresssql)
-      # f.each_line do |addresssql|
-      #   @conn.exec(addresssql)
-      # end
-    end
-  end
-
-  def drop_addresses
-    p "drop_addresses_table"
-    @conn.exec("drop table if exists addresses")
-  end
-
+  
   def notification_enable_user(user_id)
     p 'enable_user'
     @conn.exec("insert into notifications (user_id, hour, minute, area_id, notificationDisabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, false) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notificationDisabled = excluded.notificationDisabled;")
