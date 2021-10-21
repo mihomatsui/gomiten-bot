@@ -3,48 +3,45 @@ require 'pg'
 Dotenv.load
 
 class WeatherDbConnector
+  # 朝の7時
   DEFAULT_WEATHER_HOUR = 7
   DEFAULT_WEATHER_MINUTE = 0
-  DEFAULT_AREA_ID = 1
+  # 名古屋市西部
+  DEFAULT_AREA_ID = 73
 
-  
   def initialize
-    #uri = URI.parse(ENV['DATABASE_URL'])
-    @conn ||= PG::connect(
+    @conn = PG::connect(
       host: ENV["DB_HOST"],
       dbname: ENV["DB_NAME"],
       user: ENV["DB_USER"],
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    # 毎回リセットする
-    drop_weathers
-    create_weathers
-    insert_weathers
-    drop_addresses
-    create_addresses
-    insert_addresses
+    result = @conn.exec("select table_name from information_schema.tables where table_schema = '#{ENV["DB_NAME"]}';")
+    init if result.count == 0
   end
-
-  def create_weathers
-    p 'create_weathers_table'
-    File.open('create_weathers.sql', 'r:utf-8') do |f|
-      weathersql = f.read
-      @conn.exec(weathersql)
-    end
-
-    p 'create_notifications_table'
-    File.open('notifications.sql', 'r:utf-8') do |f|
-      notificationsql = f.read
-      @conn.exec(notificationsql)
-    end
-  end
-
-  def insert_weathers
-    p 'insert_weathers_table'
-    File.open('insert_weathers.sql', 'r:utf-8') do |f|
-      f.each_line do |weathersql|
+  
+  def init
+    def create_table
+      p "create_weathers_table"
+      File.open("create_weathers.sql", "r:utf-8") do |f|
+        weathersql = f.read
         @conn.exec(weathersql)
+      end
+
+      p "create_notifications_table"
+      File.open("notifications.sql", "r:utf-8") do |f|
+        notificationsql = f.read
+        @conn.exec(notificationsql)
+      end
+    end
+
+    def insert_weathers
+      p "insert_weathers_table"
+      File.open("insert_weathers.sql", "r:utf-8") do |f|
+        f.each_line do |weathersql|
+          @conn.exec(weathersql)
+        end
       end
     end
   end
@@ -89,11 +86,6 @@ class WeatherDbConnector
     @conn.exec("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, notificationDisabled = excluded.notificationDisabled;")
   end
 
-  def set_time(user_id, hour, minute)
-    p 'set_time'
-    @conn.exec("insert into notifications (user_id, hour,minute, area_id, notificationDisabled) values ('#{user_id}', #{hour},#{minute}, #{DEFAULT_AREA_ID}, true) on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, hour = excluded.hour, minute = excluded.minute;")
-  end
-
   def set_weather_location(user_id, latitude, longitude)
     p 'set_weather_location'
     result = @conn.exec("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
@@ -106,7 +98,7 @@ class WeatherDbConnector
     p 'set_garbage_location'
     result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
     puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
-    @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
+    # @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
     return result["pref"], result["municipalities"],result["townblock"]
   end
 
@@ -128,10 +120,5 @@ class WeatherDbConnector
       p row
     end
     return results.first
-  end
-
-  def fix_notifications
-    p 'fix_notifications'
-    @conn.exec("update notifications set hour = 7, minute = 0 where hour is null")
   end
 end

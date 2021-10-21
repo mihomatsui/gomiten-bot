@@ -1,0 +1,116 @@
+// 共通
+a:hover {
+  text-decoration: none;
+}
+
+.base-container {
+  margin: 0 auto;
+}
+
+// max-width
+
+.mw-md {
+  max-width: 720px;
+}
+
+.mw-lg {
+  max-width: 960px;
+}
+
+.mw-xl {
+  max-width: 1200px;
+}
+
+// ヘッダー
+body {
+  padding-top: 70px;
+}
+
+.base-bg-color {
+  background-color: #ffC60B;
+}
+
+.header-nav {
+  font-size: 1.0rem;
+  margin: 0 auto;
+  word-break: keep-all;
+}
+
+.nav-item {
+  margin: 0 8px;
+}
+
+.wrap {
+  overflow: hidden;
+}
+
+// ロゴ画像
+.navbar-brand {
+  background: url("/image/logo.png") no-repeat left center;
+  background-size: contain;
+  height: 50px;
+  width: 200px;
+}
+
+// フッター
+footer {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  a {
+    padding: 0 auto;
+    font-size: 20px;
+  }
+} 
+
+// トップページ
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-fukidashi {
+  width:80%;
+  height: auto;
+  margin-top: 20px;
+}
+
+.img-qr {
+  width:50%;
+  height: auto;
+}
+
+// カード 
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-m {
+  margin-top: 10px;
+}
+
+.img-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-img-top {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.section-bg {
+  background-color: #FFC60B;
+}
+section {
+  padding: 10px 0;
+}
+
+.section-title {
+  text-align: center;
+}
