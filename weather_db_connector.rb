@@ -35,11 +35,11 @@ class WeatherDbConnector
         @conn.exec(notificationsql)
       end
 
-      p "create_addresses_table"
-      File.open("create_addresses.sql", "r:utf-8") do |f|
-        addressessql = f.read
-        @conn.exec(addressessql)
-      end
+      # p "create_addresses_table"
+      # File.open("create_addresses.sql", "r:utf-8") do |f|
+      #   addressessql = f.read
+      #   @conn.exec(addressessql)
+      # end
     end
 
     def insert_info
@@ -50,11 +50,11 @@ class WeatherDbConnector
         end
       end
 
-      p "insert_addresses"
-      File.open("insert_addresses.sql", "r:utf-8") do |f|
-        addresssql = f.read
-        @conn.exec(addresssql)
-      end
+      # p "insert_addresses"
+      # File.open("insert_addresses.sql", "r:utf-8") do |f|
+      #   addresssql = f.read
+      #   @conn.exec(addresssql)
+      # end
     end
   end
 
@@ -62,7 +62,7 @@ class WeatherDbConnector
       p "drop_table"
       @conn.exec("drop table if exists weathers")
       @conn.exec("drop table if exists notifications")
-      @conn.exec("drop table if exists addresses")
+      # @conn.exec("drop table if exists addresses")
   end
   
   def notification_enable_user(user_id)
@@ -83,13 +83,13 @@ class WeatherDbConnector
     return result["pref"], result["area"]
   end
 
-  def set_garbage_location(user_id, latitude, longitude)
-    p 'set_garbage_location'
-    result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
-    @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
-    return result["pref"], result["municipalities"],result["townblock"]
-  end
+  # def set_garbage_location(user_id, latitude, longitude)
+  #   p 'set_garbage_location'
+  #   result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
+  #   puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
+  #   @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
+  #   return result["pref"], result["municipalities"],result["townblock"]
+  # end
 
   def get_all_notifications
    p 'get_all_notifications'

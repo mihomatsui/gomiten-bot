@@ -91,15 +91,8 @@ post '/callback' do
         puts "位置情報を取得しました！"
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
-        pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
-        $db.set_garbage_location.each do |row|
-          if row['municipalities'].include?("名古屋") 
-            reply_text << %{\n名古屋市です。}
-            #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
-          else
-            reply_text << %{\nゴミ収集の通知の対象地域外です。}
-          end
-        end
+        # pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
+        #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
     end
