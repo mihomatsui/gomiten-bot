@@ -3,6 +3,4 @@ create table addresses (
   pref varchar(32),
   municipalities varchar(32),
   townblock varchar(32),
-  latitude numeric,
-  longitude numeric
 )
