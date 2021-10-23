@@ -40,6 +40,18 @@ class WeatherDbConnector
         addressessql = f.read
         @conn.exec(addressessql)
       end
+
+      p "create_category_table"
+      File.open("create_addresses.sql", "r:utf-8") do |f|
+        addressessql = f.read
+        @conn.exec(addressessql)
+      end
+
+      p "create_garbage_table"
+      File.open("create_garbage.sql", "r:utf-8") do |f|
+        garbagesql = f.read
+        @conn.exec(garbagesql)
+      end
     end
 
     def insert_info
@@ -50,19 +62,29 @@ class WeatherDbConnector
         end
       end
 
-      # p "insert_addresses"
-      # File.open("insert_addresses.sql", "r:utf-8") do |f|
-      #   addresssql = f.read
-      #   @conn.exec(addresssql)
-      # end
+      p "insert_addresses"
+      File.open("insert_addresses.sql", "r:utf-8") do |f|
+        addresssql = f.read
+        @conn.exec(addresssql)
+      end
+
+      p "insert_category"
+      File.open("insert_category.sql", "r:utf-8") do |f|
+        categorysql = f.read
+        @conn.exec(categorysql)
+      end
+
+      p "insert_garbage"
+      File.open("insert_garbage.sql", "r:utf-8") do |f|
+        garbagesql = f.read
+        @conn.exec(cgarbagesql)
+      end
     end
   end
 
   def drop_table
       p "drop_table"
-      @conn.exec("drop table if exists weathers")
-      @conn.exec("drop table if exists notifications")
-      # @conn.exec("drop table if exists addresses")
+      @conn.exec("drop table if exists weathers, notifications, addresses, category, garbage;")
   end
   
   def notification_enable_user(user_id)
