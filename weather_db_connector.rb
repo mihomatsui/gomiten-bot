@@ -35,11 +35,11 @@ class WeatherDbConnector
         @conn.exec(notificationsql)
       end
 
-      # p "create_addresses_table"
-      # File.open("create_addresses.sql", "r:utf-8") do |f|
-      #   addressessql = f.read
-      #   @conn.exec(addressessql)
-      # end
+      p "create_addresses_table"
+      File.open("create_addresses.sql", "r:utf-8") do |f|
+        addressessql = f.read
+        @conn.exec(addressessql)
+      end
     end
 
     def insert_info
