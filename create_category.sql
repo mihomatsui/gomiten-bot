@@ -1,4 +1,4 @@
-create table category (
+create table if not exists category (
   id int primary key, 
-  type varchar(32)
+  classification varchar(32)
 )
