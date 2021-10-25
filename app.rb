@@ -26,7 +26,7 @@ def client
   }
 end
 
-get '/send' do
+post '/send' do
   weather_info_conn = WeatherInfoConnector.new
   now_time = Time.now
   begin
@@ -39,17 +39,8 @@ get '/send' do
       set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
       forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
       puts %{#{hour}:#{minute} - #{forecast}}
-      message = { type: 'text', text: forecast }
+      message = { type: 'text', text: params[:forecast] }
       p 'push message'
-    
-      case forecast
-      when /.*(雨|雪).*/ 
-        message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
-        messages = [message, message_sticker]
-        p client.push_message(row['user_id'], messages)
-      else
-        p client.push_message(row['user_id'], message)
-      end  
     end
   end
   rescue => e
