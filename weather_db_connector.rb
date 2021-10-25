@@ -17,71 +17,73 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    result = @conn.exec("select table_name from information_schema.tables where table_schema = '#{ENV["DB_NAME"]}';")
-    init if result.count == 0
+    init
   end
   
   def init
-    def create_table
-      p "create_weathers_table"
-      File.open("create_weathers.sql", "r:utf-8") do |f|
-        weathersql = f.read
-        @conn.exec(weathersql)
-      end
-
-      p "create_notifications_table"
-      File.open("notifications.sql", "r:utf-8") do |f|
-        notificationsql = f.read
-        @conn.exec(notificationsql)
-      end
-
-      p "create_addresses_table"
-      File.open("create_addresses.sql", "r:utf-8") do |f|
-        addressessql = f.read
-        @conn.exec(addressessql)
-      end
-
-      p "create_category_table"
-      File.open("create_addresses.sql", "r:utf-8") do |f|
-        addressessql = f.read
-        @conn.exec(addressessql)
-      end
-
-      p "create_garbage_table"
-      File.open("create_garbage.sql", "r:utf-8") do |f|
-        garbagesql = f.read
-        @conn.exec(garbagesql)
-      end
+    create_table
+    insert_info
+  end
+ 
+  def create_table
+    p "create_weathers_table"
+    File.open("create_weathers.sql", "r:utf-8") do |f|
+      weathersql = f.read
+      @conn.exec(weathersql)
     end
 
-    def insert_info
-      p "insert_weathers"
-      File.open("insert_weathers.sql", "r:utf-8") do |f|
-        f.each_line do |weathersql|
-          @conn.exec(weathersql)
-        end
-      end
+    p "create_notifications_table"
+    File.open("notifications.sql", "r:utf-8") do |f|
+      notificationsql = f.read
+      @conn.exec(notificationsql)
+    end
 
-      p "insert_addresses"
-      File.open("insert_addresses.sql", "r:utf-8") do |f|
-        addresssql = f.read
-        @conn.exec(addresssql)
-      end
+    p "create_addresses_table"
+    File.open("create_addresses.sql", "r:utf-8") do |f|
+      addressessql = f.read
+      @conn.exec(addressessql)
+    end
 
-      p "insert_category"
-      File.open("insert_category.sql", "r:utf-8") do |f|
-        categorysql = f.read
-        @conn.exec(categorysql)
-      end
+    p "create_category_table"
+    File.open("create_category.sql", "r:utf-8") do |f|
+      categorysql = f.read
+      @conn.exec(categorysql)
+    end
 
-      p "insert_garbage"
-      File.open("insert_garbage.sql", "r:utf-8") do |f|
-        garbagesql = f.read
-        @conn.exec(cgarbagesql)
-      end
+    p "create_garbage_table"
+    File.open("create_garbage.sql", "r:utf-8") do |f|
+      garbagesql = f.read
+      @conn.exec(garbagesql)
     end
   end
 
+  def insert_info
+    p "insert_weathers"
+    File.open("insert_weathers.sql", "r:utf-8") do |f|
+      f.each_line do |weathersql|
+        @conn.exec(weathersql)
+      end
+    end
+
+    p "insert_addresses"
+    File.open("insert_addresses.sql", "r:utf-8") do |f|
+      addresssql = f.read
+      @conn.exec(addresssql)
+    end
+
+    p "insert_category"
+    File.open("insert_category.sql", "r:utf-8") do |f|
+      categorysql = f.read
+      @conn.exec(categorysql)
+    end
+
+    p "insert_garbage"
+    File.open("insert_garbage.sql", "r:utf-8") do |f|
+      garbagesql = f.read
+      @conn.exec(garbagesql)
+    end
+  end
+  
   def drop_table
       p "drop_table"
       @conn.exec("drop table if exists weathers, notifications, addresses, category, garbage;")
