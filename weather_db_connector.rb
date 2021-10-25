@@ -107,14 +107,6 @@ class WeatherDbConnector
     return result["pref"], result["area"]
   end
 
-  # def set_garbage_location(user_id, latitude, longitude)
-  #   p 'set_garbage_location'
-  #   result = @conn.exec("select * from addresses order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-  #   puts "#{result["id"]},#{result["pref"]},#{result["municipalities"]},#{result["townblock"]},#{result["latitude"]},#{result["longitude"]}"
-  #   @conn.exec("insert into notifications (user_id, hour, minute, area_id) values ('#{user_id}', #{DEFAULT_WEATHER_HOUR},#{DEFAULT_WEATHER_MINUTE},'#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
-  #   return result["pref"], result["municipalities"],result["townblock"]
-  # end
-
   def get_all_notifications
    p 'get_all_notifications'
    results = @conn.exec('select * from notifications inner join weathers on notifications.area_id = weathers.id;')
