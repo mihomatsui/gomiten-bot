@@ -27,31 +27,31 @@ class WeatherDbConnector
  
   def create_table
     p "create_weathers_table"
-    File.open("create_weathers.sql", "r:utf-8") do |f|
+    File.open("sql/create_weathers.sql", "r:utf-8") do |f|
       weathersql = f.read
       @conn.exec(weathersql)
     end
 
     p "create_notifications_table"
-    File.open("notifications.sql", "r:utf-8") do |f|
+    File.open("sql/notifications.sql", "r:utf-8") do |f|
       notificationsql = f.read
       @conn.exec(notificationsql)
     end
 
     p "create_addresses_table"
-    File.open("create_addresses.sql", "r:utf-8") do |f|
+    File.open("sql/create_addresses.sql", "r:utf-8") do |f|
       addressessql = f.read
       @conn.exec(addressessql)
     end
 
     p "create_category_table"
-    File.open("create_category.sql", "r:utf-8") do |f|
+    File.open("sql/create_category.sql", "r:utf-8") do |f|
       categorysql = f.read
       @conn.exec(categorysql)
     end
 
     p "create_garbage_table"
-    File.open("create_garbage.sql", "r:utf-8") do |f|
+    File.open("sql/create_garbage.sql", "r:utf-8") do |f|
       garbagesql = f.read
       @conn.exec(garbagesql)
     end
@@ -59,26 +59,26 @@ class WeatherDbConnector
 
   def insert_info
     p "insert_weathers"
-    File.open("insert_weathers.sql", "r:utf-8") do |f|
+    File.open("sql/insert_weathers.sql", "r:utf-8") do |f|
       f.each_line do |weathersql|
         @conn.exec(weathersql)
       end
     end
 
     p "insert_addresses"
-    File.open("insert_addresses.sql", "r:utf-8") do |f|
+    File.open("sql/insert_addresses.sql", "r:utf-8") do |f|
       addresssql = f.read
       @conn.exec(addresssql)
     end
 
     p "insert_category"
-    File.open("insert_category.sql", "r:utf-8") do |f|
+    File.open("sql/insert_category.sql", "r:utf-8") do |f|
       categorysql = f.read
       @conn.exec(categorysql)
     end
 
     p "insert_garbage"
-    File.open("insert_garbage.sql", "r:utf-8") do |f|
+    File.open("sql/insert_garbage.sql", "r:utf-8") do |f|
       garbagesql = f.read
       @conn.exec(garbagesql)
     end
