@@ -3,7 +3,7 @@ require 'net/http'
 Net::HTTP.version_1_2
 hTTP = Net::HTTP.new("https://gomiten-bot-staging.herokuapp.com", 443)
 http.use_ssl = true
-response = http.post('/send', forecast)
+response = http.post('/send', 'msg=forecast')
 
 case forecast
 when /.*(雨|雪).*/ 

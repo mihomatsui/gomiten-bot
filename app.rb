@@ -39,7 +39,7 @@ post '/send' do
       set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
       forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
       puts %{#{hour}:#{minute} - #{forecast}}
-      message = { type: 'text', text: params[:forecast] }
+      message = { type: 'text', text: params[:msg] }
       p 'push message'
     end
   end
