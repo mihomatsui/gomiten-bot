@@ -26,6 +26,29 @@ def client
   }
 end
 
+post '/send' do
+  weather_info_conn = WeatherInfoConnector.new
+  now_time = Time.now
+  begin
+  $db.get_all_notifications.each do |row|
+    if row['notificationDisabled'] == false then
+      hour = row['hour'] || 7
+      minute = row['minute'] || 0
+      next if hour != (now_time.hour + 9) % 24 # GMTからJISに変換 早期リターン
+      next if minute != now_time.min
+      set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
+      forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
+      puts %{#{hour}:#{minute} - #{forecast}}
+      message = { type: 'text', text: params[:msg] }
+      p 'push message'
+    end
+  end
+  rescue => e
+    p e
+  end
+  puts "done."
+end
+
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
@@ -91,7 +114,7 @@ post '/callback' do
         puts "位置情報を取得しました！"
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
-        pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
+        # pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
         #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
