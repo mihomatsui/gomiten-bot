@@ -18,6 +18,19 @@ end
 
 $db = WeatherDbConnector.new
 
+helpers do
+  def protected!
+    return if authorized?
+    headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+    halt 401, "Not authorized\n"
+  end
+
+  def authorized?
+    @auth ||= Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials ==[ENV['BASIC_AUTH_USERNAME'], ENV['BASIC_AUTH_PASSWORD']]
+  end
+end
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -27,6 +40,7 @@ def client
 end
 
 get '/send' do
+  protected! #basic認証
   weather_info_conn = WeatherInfoConnector.new
   now_time = Time.now
   begin
