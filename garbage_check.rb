@@ -1,44 +1,25 @@
-class GarbageCheck
-  require 'date'
-  require_relative 'date_check'
+require 'date'
+require_relative 'date_check'
 
-  def self.target_day
-    @target_day ||= Date.tomorrow
+class Sengen2Chome
+  #ゴミ出し日を定義する
+  GARBAGE_DISPOSAL_DAYS = [
+    # 毎週火・金は可燃ごみの日
+    *%w(火 金).product([*1..5]).map { |wday, nth| GarbageDate.new(wday: wday, nth: nth, type: '可燃ゴミ')},
+    GarbageDate.new(wday: '水', nth: 4, type: '不燃ゴミ'),
+    GarbageDate.new(wday: '木', nth: 4, type: 'プラスチックゴミ'),
+    GarbageDate.new(wday: '木', nth: 4, type: '缶・ビン・ペットボトル')
+  ]
+
+  tomorrow = Date.tomorrow
+  garbage_disposal_day = GARBAGE_DISPOSAL_DAYS.find {_1.apply?(tomorrow)}
+
+  message = ''
+  message << %{明日(#{tomorrow.strftime("%m月％d日 %a")})は}
+  if garbage_disposal_day
+  message << %{#{garbage_disposal_day}の日です}
+  else 
+    message << %{特に出せるゴミはありません}
   end
-
-  # 燃えるゴミ
-  def self.burnable_garbage?
-  end
-
-  # 缶・ビン・ペットボトル
-  def self.recyclable_garbage?
-
-  end
-
-  # プラスチック
-  def self.plastic_garbage?
-  end
-
-  # 不燃ゴミ
-  def self.not_burnable_garbage?
-  end
-
-  def self.check
-    return :burnable_garbage if burnable_garbage?
-    return :recyclable_garbage if recyclable_garbage?
-    return :plastic_garbage if plastic_garbage?
-    return :not_burnable_garbage if not_burnable_garbage?
-    :none
-  end
-
-  def self.notice_message
-    message = case check
-    when :burnable_garbage then '燃えるゴミの日です'
-    when :recyclable_garbage then '缶・ビン・ペットボトルの日です'
-    when :plastic_garbage then 'プラスチックゴミの日です'
-    when :not_burnable_garbage then '不燃ゴミの日です'
-    else '特に出せるゴミはありません'
-    end
-    "明日(#{target_day.strftime("%m月%d日 %a")})は、#{message}"
-  end
+  return message
 end
