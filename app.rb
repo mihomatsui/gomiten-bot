@@ -18,6 +18,19 @@ end
 
 $db = WeatherDbConnector.new
 
+helpers do
+  def protected!
+    return if authorized?
+    headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+    halt 401, "Not authorized\n"
+  end
+
+  def authorized?
+    @auth ||= Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials ==[ENV['BASIC_AUTH_USERNAME'], ENV['BASIC_AUTH_PASSWORD']]
+  end
+end
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -26,7 +39,8 @@ def client
   }
 end
 
-post '/send' do
+get '/send' do
+  protected! #basic認証
   weather_info_conn = WeatherInfoConnector.new
   now_time = Time.now
   begin
@@ -39,8 +53,17 @@ post '/send' do
       set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
       forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
       puts %{#{hour}:#{minute} - #{forecast}}
-      message = { type: 'text', text: params[:msg] }
+      message = { type: 'text', text: forecast }
       p 'push message'
+
+      case forecast
+      when /.*(雨|雪).*/ 
+        message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
+        messages = [message, message_sticker]
+        p client.push_message(row['user_id'], messages)
+      else
+        p client.push_message(row['user_id'], message)
+      end
     end
   end
   rescue => e
