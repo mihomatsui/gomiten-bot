@@ -10,6 +10,7 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
+require './date_check'
 
 helpers ApplicationHelper
 get '/' do
@@ -127,6 +128,7 @@ post '/callback' do
             reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 2) 
             p e
           end  
+        when /.*(ゴミ|ごみ).*/
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
