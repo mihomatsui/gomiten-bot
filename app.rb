@@ -48,8 +48,8 @@ get '/send' do
     if row['notificationDisabled'] == false then
       hour = row['hour'] || 7
       minute = row['minute'] || 0
-      next if hour != (now_time.hour + 9) % 24 # GMTからJISに変換 早期リターン
-      next if minute != now_time.min
+      #next if hour != (now_time.hour + 9) % 24 # GMTからJISに変換 早期リターン
+      #next if minute != now_time.min
       set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
       forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
       puts %{#{hour}:#{minute} - #{forecast}}
