@@ -40,7 +40,7 @@ def client
 end
 
 get '/send' do
-  #protected! #basic認証
+  protected! #basic認証
   weather_info_conn = WeatherInfoConnector.new
   begin
   $db.get_all_notifications.each do |row|
