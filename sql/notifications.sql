@@ -3,5 +3,5 @@ create table if not exists notifications (
   hour int,
   minute int,
   area_id int,
-  notificationDisabled boolean default false
+  is_enabled boolean default false
 )
