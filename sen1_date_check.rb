@@ -1,5 +1,7 @@
 require "active_support"
 require "active_support/core_ext"
+
+# 西区浅間一丁目のゴミ収集日のデータ
 class GarbageDate
   attr_reader :wday, :nth, :type
   # 曜日
