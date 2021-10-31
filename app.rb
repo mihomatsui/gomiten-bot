@@ -43,28 +43,23 @@ end
 get '/send' do
   protected! #basic認証
   weather_info_conn = WeatherInfoConnector.new
-  now_time = Time.now
   begin
   $db.get_all_notifications.each do |row|
-    if row['notificationDisabled'] == false then
-      hour = row['hour'] || 7
-      minute = row['minute'] || 0
-      next if hour != (now_time.hour + 9) % 24 # GMTからJISに変換 早期リターン
-      next if minute != now_time.min
-      set_day = hour < 6 ? 1 : 0 # weatherapiは朝6時に更新
-      forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
-      puts %{#{hour}:#{minute} - #{forecast}}
-      message = { type: 'text', text: forecast }
-      p 'push message'
+    set_day = 0 # weatherapiは朝6時に更新 今日の天気
+    forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
+    puts forecast
+    message = { type: 'text', text: forecast }
+    notificationDisabled = true
+    p 'push message'
 
-      case forecast
-      when /.*(雨|雪).*/ 
-        message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
-        messages = [message, message_sticker]
-        p client.push_message(row['user_id'], messages)
-      else
-        p client.push_message(row['user_id'], message)
-      end
+    case forecast
+    when /.*(雨|雪).*/ 
+      message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
+      messages = [message, message_sticker]
+        
+      p client.push_message(row['user_id'], messages)
+    else
+      p client.push_message(row['user_id'], message)
     end
   end
   rescue => e
@@ -85,22 +80,14 @@ post '/callback' do
     when Line::Bot::Event::Message
       user_id = event['source']['userId']
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
-      reply_text << "・「スタート」と入力すると、毎日朝7時に天気をお知らせします。\n"
-      reply_text << "・「ストップ」と入力すると、停止します。\n\n"
+      reply_text << "・毎日朝7時に天気をお知らせします。\n"
+      reply_text << "・通知が多い場合はトーク画面右上から設定を変更してください。\n\n"
       reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
         # 文字列が入力された場合
         case event.message['text']
-        when /.*(スタート).*/
-          $db.notification_enable_user(user_id)
-          info = $db.get_notifications(user_id)
-          reply_text = %{#{info['pref']} #{info['area']} の天気をお知らせします！}
-          reply_text << "\n\nお知らせを停止するときは「ストップ」と入力してください。\n\n地域を設定するときは 位置情報 を送信してください。"
-        when /.*(ストップ).*/
-          $db.notification_disnable_user(user_id)
-          reply_text = "お知らせの停止を受け付けました。\n\nお知らせを開始するときは「スタート」と入力してください。\n\n使い方を見たい場合は何か話しかけてください。"
         when /.*(天気|てんき).*/
           weather_info_conn = WeatherInfoConnector.new
           begin
