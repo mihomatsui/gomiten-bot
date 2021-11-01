@@ -10,6 +10,10 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
+require './suk_date_check'
+require './sun_date_check'
+require './sen1_date_check'
+require './sen2_date_check'
 
 helpers ApplicationHelper
 get '/' do
@@ -115,7 +119,15 @@ post '/callback' do
             p e
           end  
         when /.*(ゴミ|ごみ).*/
-          LineBot::Messages::GarbageMessage.new.send
+          #LineBot::Messages::GarbageMessage.new.send
+        when /.*(数奇屋|すきや).*/
+          reply_text =  GarbageDateSuk.notice_message
+        when /.*(砂原町|すなはら).*/
+          reply_text =  GarbageDateSun.notice_message
+        when /.*(浅間1|浅間一).*/
+          reply_text =  GarbageDateSen1.notice_message
+        when /.*(浅間2|浅間二).*/
+          reply_text =  GarbageDateSen2.notice_message
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合

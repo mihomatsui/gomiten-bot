@@ -1,49 +1,48 @@
-require "active_support"
-require "active_support/core_ext"
-
 # 西区浅間一丁目のゴミ収集日のデータ
-class GarbageDate
-  attr_reader :wday, :nth, :type
-  # 曜日
-  WDAYS = %w(日 月 火 水 木 金 土).freeze
-
-  def initialize(wday:, nth:, type:)
-    @wday = WDAYS.index(wday)
-    @nth = nth
-    @type = type
+class GarbageDateSen1
+  require 'date'
+  require_relative 'date_patch'
+  
+  def self.target_day
+    @target_day ||= Date.tomorrow
   end
 
-  def to_s
-    "第 #{nth} #{WDAYS[wday]}曜日「#{type}」"
+  def self.burnable_garbage? #可燃ゴミ
+    target_day.monday? || target_day.thursday?
   end
 
-  def apply?(date)
-    wday == date.wday && nth == nth_day_of_week(date)
+  def self.not_burnable_garbage? #不燃ゴミ
+    now = target_day
+    now.wednesday? && now.mweek == 4
   end
 
-  private
-
-  # 日付がその月で何回目の曜日なのか
-  def nth_day_of_week(date)
-    (date.beginning_of_month..date).count { _1.wday == date.wday }
+  def self.plastic_garbage? #プラスチックゴミ
+    target_day.friday?
   end
 
-  GARBAGE_DISPOSAL_DAYS = [
-  # 毎週月・木は可燃ごみの日
-    *%w(月 木).product([*1..5]).map { |wday, nth| GarbageDate.new(wday: wday, nth: nth, type: '可燃ゴミ')},
-    GarbageDate.new(wday: '水', nth: 4, type: '不燃ゴミ'),
-    *%w(金).product([*1..5]).map { |wday, nth| GarbageDate.new(wday: wday, nth: nth, type: 'プラスチックゴミ')},
-    *%w(水).product([*1..5]).map { |wday, nth| GarbageDate.new(wday: wday, nth: nth, type: '缶・ビン・ペットボトル')}
-  ]
-  tomorrow = Date.tomorrow
-  garbage_disposal_day = GARBAGE_DISPOSAL_DAYS.find {_1.apply?(tomorrow)}
-
-  message = ''
-  message << %{明日(#{tomorrow.strftime("%m月%d日")})は}
-  if garbage_disposal_day
-    message << %{#{garbage_disposal_day}の日です}
-  else 
-    message << %{特に出せるゴミはありません}
+  def self.bottle_can_garbage? #缶・ビン・ペットボトル
+    target_day.wednesday?
   end
-  puts message
+
+  def self.check
+     return :burnable_garbage if burnable_garbage?
+     return :not_burnable_garbage if not_burnable_garbage?
+     return :plastic_garbage if plastic_garbage?
+     return :bottle_can_garbage if bottle_can_garbage?
+  end
+    
+  def self.notice_message
+    garbage_message = case check
+    when :burnable_garbage then '可燃ゴミの日です'
+    when :not_burnable_garbage then '不燃ゴミの日です'
+    when :plastic_garbage then 'プラスチックゴミの日です'
+    when :bottle_can_garbage then '缶・ビン・ペットボトルの日です'
+    else '特に出せるゴミはありません'
+    end
+    # Botでメッセージを表示する
+    message = ''
+    message << %{明日(#{target_day.strftime("%m月%d日%a")})は、}
+    message << %{#{garbage_message}}
+    return message
+  end
 end
