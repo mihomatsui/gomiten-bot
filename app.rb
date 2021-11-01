@@ -10,7 +10,6 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
-require './date_check'
 
 helpers ApplicationHelper
 get '/' do
@@ -116,6 +115,7 @@ post '/callback' do
             p e
           end  
         when /.*(ゴミ|ごみ).*/
+          LineBot::Messages::GarbageMessage.new.send
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
