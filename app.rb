@@ -10,10 +10,10 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
-require './suk_date_check'
-require './sun_date_check'
-require './sen1_date_check'
-require './sen2_date_check'
+require './garbage_date_check/sukiya'
+require './garbage_date_check/sunahara'
+require './garbage_date_check/sengen1'
+require './garbage_date_check/sengen2'
 
 helpers ApplicationHelper
 get '/' do

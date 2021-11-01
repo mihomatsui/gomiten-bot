@@ -1,7 +1,7 @@
-# 西区砂原町のゴミ収集日のデータ
-class GarbageDateSun
+# 西区浅間二丁目のゴミ収集日のデータ
+class GarbageDateSen2
   require 'date'
-  require_relative 'date_patch'
+  require './date_patch'
   
   def self.target_day
     @target_day ||= Date.tomorrow
@@ -13,15 +13,15 @@ class GarbageDateSun
 
   def self.not_burnable_garbage? #不燃ゴミ
     now = target_day
-    now.wednesday? && now.mweek == 3
+    now.wednesday? && now.mweek == 4
   end
 
   def self.plastic_garbage? #プラスチックゴミ
-    target_day.wednesday?
+    target_day.thursday?
   end
 
   def self.bottle_can_garbage? #缶・ビン・ペットボトル
-    target_day.thursday?
+    target_day.wednesday?
   end
 
   def self.check
@@ -46,3 +46,4 @@ class GarbageDateSun
     return message
   end
 end
+

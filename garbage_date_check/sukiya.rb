@@ -1,7 +1,7 @@
 # 西区数奇屋町のゴミ収集日のデータ
 class GarbageDateSuk
   require 'date'
-  require_relative 'date_patch'
+  require './date_patch'
   
   def self.target_day
     @target_day ||= Date.tomorrow
