@@ -85,7 +85,7 @@ post '/callback' do
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
       reply_text << "・毎日朝7時に天気をお知らせします。\n"
       reply_text << "・通知が多い場合はトーク画面右上から設定を変更してください。\n\n"
-      reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
+      reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
