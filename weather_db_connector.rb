@@ -60,7 +60,7 @@ class WeatherDbConnector
 
   def get_all_notifications
    p "get_all_notifications"
-   results = @conn.exec('select * from notifications inner join weathers on notifications.area_id = weathers.id;')
+   results = @conn.exec("select * from notifications inner join weathers on notifications.area_id = weathers.id;")
    results.each do |row|
     puts "----------------------------"
     p row
