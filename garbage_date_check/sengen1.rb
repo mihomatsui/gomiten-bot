@@ -33,11 +33,11 @@ class GarbageDateSen1
     
   def self.notice_message
     garbage_message = case check
-    when :burnable_garbage then '可燃ゴミの日です'
-    when :not_burnable_garbage then '不燃ゴミの日です'
-    when :plastic_garbage then 'プラスチックゴミの日です'
-    when :bottle_can_garbage then '缶・ビン・ペットボトルの日です'
-    else '特に出せるゴミはありません'
+    when :burnable_garbage then "可燃ゴミの日です"
+    when :not_burnable_garbage then "不燃ゴミの日です"
+    when :plastic_garbage then "プラスチックゴミの日です"
+    when :bottle_can_garbage then "缶・ビン・ペットボトルの日です"
+    else "特に出せるゴミはありません"
     end
     # Botでメッセージを表示する
     message = ''
