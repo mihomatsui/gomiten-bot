@@ -81,8 +81,6 @@ post '/callback' do
   events = client.parse_events_from(body)
   events.each do |event|
     case event
-    when Line::Bot::Event::Postback # ポストバックイベント
-      LineBot::PostbackEvent.send(event['postback']['data'])
     when Line::Bot::Event::Message
       user_id = event['source']['userId']
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
