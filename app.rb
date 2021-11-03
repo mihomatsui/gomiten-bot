@@ -52,7 +52,6 @@ get '/send' do
     forecast = weather_info_conn.get_weatherinfo(row['pref'], row['area'], row['url'].sub(/http/, 'https'), row['xpath'], set_day)
     puts forecast
     message = { type: 'text', text: forecast }
-    notificationDisabled = true
     p 'push message'
 
     case forecast
