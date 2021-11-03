@@ -49,8 +49,8 @@ class WeatherDbConnector
   end
   
   def drop_table
-      p "drop_table"
-      @conn.exec("drop table if exists weathers, notifications;")
+    p "drop_table"
+    @conn.exec("drop table if exists weathers, notifications;")
   end
   
   def set_weather_location(user_id, latitude, longitude)
