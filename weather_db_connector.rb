@@ -47,20 +47,20 @@ class WeatherDbConnector
   
   def drop_table
     p "drop_table"
-    @conn.exec("drop table if exists weathers, notifications;")
+    @conn.exec(%{drop table if exists weathers, notifications;})
   end
   
   def set_weather_location(user_id, latitude, longitude)
     p "set_weather_location"
-    result = @conn.exec("select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;").first
-    puts "#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}"
-    @conn.exec("insert into notifications (user_id, area_id) values ('#{user_id}', '#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;")
+    result = @conn.exec(%{select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;}).first
+    puts %{#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}}
+    @conn.exec(%{insert into notifications (user_id, area_id) values ('#{user_id}', '#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;})
     return result["pref"], result["area"]
   end
 
   def get_all_notifications
    p "get_all_notifications"
-   results = @conn.exec("select * from notifications inner join weathers on notifications.area_id = weathers.id;")
+   results = @conn.exec(%{select * from notifications inner join weathers on notifications.area_id = weathers.id;})
    results.each do |row|
     puts "----------------------------"
     p row
@@ -70,7 +70,7 @@ class WeatherDbConnector
 
   def get_notifications(user_id)
     p "get_notifications(user_id)"
-    results = @conn.exec("select * from notifications inner join weathers on notifications.area_id = weathers.id where notifications.user_id = '#{user_id}';")
+    results = @conn.exec(%{select * from notifications inner join weathers on notifications.area_id = weathers.id where notifications.user_id = '#{user_id}';})
     results.each do |row|
       puts "----------------------------"
       p row
