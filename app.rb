@@ -14,7 +14,6 @@ require './garbage_date_check/sukiya'
 require './garbage_date_check/sunahara'
 require './garbage_date_check/sengen1'
 require './garbage_date_check/sengen2'
-require './garbage_message'
 
 helpers ApplicationHelper
 get '/' do
