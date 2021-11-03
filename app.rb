@@ -119,6 +119,9 @@ post '/callback' do
             p e
           end  
         
+        when /.*(ゴミテン|ごみてん).*/
+          reply_text = "ゴミと天気をお知らせするLINEBotです。\n"
+          reply_text << "頭文字をとって命名しました！"
         when /.*(ゴミ|ごみ).*/
           reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・下記の文字を入力してください。\n（カッコは不要です。)\n\n"
           reply_text << "＜対応地域一覧＞\n\n"
