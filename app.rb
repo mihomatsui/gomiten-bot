@@ -14,6 +14,7 @@ require './garbage_date_check/sukiya'
 require './garbage_date_check/sunahara'
 require './garbage_date_check/sengen1'
 require './garbage_date_check/sengen2'
+require './garbage_message'
 
 helpers ApplicationHelper
 get '/' do
@@ -80,6 +81,8 @@ post '/callback' do
   events = client.parse_events_from(body)
   events.each do |event|
     case event
+    when Line::Bot::Event::Postback # ポストバックイベント
+      LineBot::PostbackEvent.send(event['postback']['data'])
     when Line::Bot::Event::Message
       user_id = event['source']['userId']
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
@@ -118,8 +121,14 @@ post '/callback' do
             reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 2) 
             p e
           end  
+        
         when /.*(ゴミ|ごみ).*/
-          #LineBot::Messages::GarbageMessage.new.send
+          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n(対応地域は下記です。カッコは不要です。)\n\n"
+          reply_text << "・名古屋市西区数奇屋\n「数奇屋」または「すきや」\n\n"
+          reply_text << "・名古屋市西区砂原町\n「砂原町」または「すなはら」\n\n"
+          reply_text << "・名古屋市西区浅間一丁目\n「浅間1」または「浅間一」\n\n"
+          reply_text << "・名古屋市西区浅間二丁目\n「浅間2」または「浅間二」\n"
+          
         when /.*(数奇屋|すきや).*/
           reply_text =  GarbageDateSuk.notice_message
         when /.*(砂原町|すなはら).*/
