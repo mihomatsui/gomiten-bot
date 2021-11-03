@@ -1,7 +1,7 @@
 # .envファイルを外す
 /.env
 # フォルダごと外す
-/gitignore_csv/
+/gitignore_try_flexmessage/
 # 拡張子を無視する
 *.map
 *.sass-cache

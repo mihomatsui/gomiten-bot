@@ -10,6 +10,10 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
+require './garbage_date_check/sukiya'
+require './garbage_date_check/sunahara'
+require './garbage_date_check/sengen1'
+require './garbage_date_check/sengen2'
 
 helpers ApplicationHelper
 get '/' do
@@ -81,7 +85,7 @@ post '/callback' do
       reply_text = "使い方:\n\n・位置情報を送信してください。\n(トークルーム下部の「+」をタップして、「位置情報」から送信できます。)\n\n"
       reply_text << "・毎日朝7時に天気をお知らせします。\n"
       reply_text << "・通知が多い場合はトーク画面右上から設定を変更してください。\n\n"
-      reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n\n"
+      reply_text << "・「天気」と入力すると、現在設定されている地域の天気をお知らせします。\n"
       
       case event.type
       when Line::Bot::Event::MessageType::Text
@@ -114,6 +118,23 @@ post '/callback' do
             reply_text = weather_info_conn.get_weatherinfo('愛知県', '西部', 'https://www.drk7.jp/weather/xml/23.xml', 'weatherforecast/pref/area[2]', set_day = 2) 
             p e
           end  
+        
+        when /.*(ゴミ|ごみ).*/
+          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・下記の文字を入力してください。\n（カッコは不要です。)\n\n"
+          reply_text << "＜対応地域一覧＞\n\n"
+          reply_text << "・名古屋市西区数奇屋\n「数奇屋」または「すきや」\n\n"
+          reply_text << "・名古屋市西区砂原町\n「砂原町」または「すなはら」\n\n"
+          reply_text << "・名古屋市西区浅間一丁目\n「浅間1」または「浅間一」\n\n"
+          reply_text << "・名古屋市西区浅間二丁目\n「浅間2」または「浅間二」\n"
+          
+        when /.*(数奇屋|すきや).*/
+          reply_text =  GarbageDateSuk.notice_message
+        when /.*(砂原町|すなはら).*/
+          reply_text =  GarbageDateSun.notice_message
+        when /.*(浅間1|浅間一).*/
+          reply_text =  GarbageDateSen1.notice_message
+        when /.*(浅間2|浅間二).*/
+          reply_text =  GarbageDateSen2.notice_message
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
@@ -124,8 +145,6 @@ post '/callback' do
         puts "位置情報を取得しました！"
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
-        # pref, municipalities, townblock = $db.set_garbage_location(user_id, latitude, longitude)
-        #reply_text << %{\nゴミ収集の地域を#{pref}#{municipalities}#{townblock}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
       end
     end
