@@ -52,8 +52,7 @@ get '/send' do
     forecast = weather_info_conn.get_weatherinfo(row["pref"], row["area"], row["url"].sub(/http/, "https"), row["xpath"], set_day)
     puts forecast
     message = { type: "text", text: forecast }
-    p "push message"
-
+  
     case forecast
     when /.*(雨|雪).*/ 
       message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
@@ -147,7 +146,6 @@ post '/callback' do
         # 位置情報を取得
         latitude = event.message["latitude"]
         longitude = event.message["longitude"]
-        puts "位置情報を取得しました！"
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
