@@ -133,7 +133,7 @@ post '/callback' do
           
         when /.*(数奇屋|すきや).*/
           reply_text =  GarbageDateSuk.notice_message
-        when /.*(砂原町|すなはら).*/
+        when /.*(砂原|すなはら).*/
           reply_text =  GarbageDateSun.notice_message
         when /.*(浅間1|浅間一).*/
           reply_text =  GarbageDateSen1.notice_message
