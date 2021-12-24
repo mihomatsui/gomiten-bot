@@ -44,12 +44,7 @@ class WeatherDbConnector
       end
     end
   end
-  
-  def drop_table
-    #drop_table
-    @conn.exec(%{drop table if exists weathers, notifications;})
-  end
-  
+
   def set_weather_location(user_id, latitude, longitude)
     result = @conn.exec(%{select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;}).first
     puts %{#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}}
