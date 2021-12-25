@@ -14,7 +14,9 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    init
+    result = @conn.exec(%{select schemaname, tablename, tableowner 
+    from pg_tables where schemaname not like 'pg_%' and schemaname != 'information_schema';})
+    init if result.count == 0
   end
   
   def init
@@ -23,13 +25,11 @@ class WeatherDbConnector
   end
  
   def create_table
-    #create_weathers_table
     File.open("sql/create_weathers.sql", "r:utf-8") do |f|
       weathersql = f.read
       @conn.exec(weathersql)
     end
 
-    #create_notifications_table
     File.open("sql/notifications.sql", "r:utf-8") do |f|
       notificationsql = f.read
       @conn.exec(notificationsql)
@@ -37,7 +37,6 @@ class WeatherDbConnector
   end
 
   def insert_info
-    #insert_weathers
     File.open("sql/insert_weathers.sql", "r:utf-8") do |f|
       f.each_line do |weathersql|
         @conn.exec(weathersql)
