@@ -34,13 +34,22 @@ class WeatherDbConnector
       notificationsql = f.read
       @conn.exec(notificationsql)
     end
+
+    File.open("sql/create_garbages.sql", "r:utf-8") do |f|
+      garbagesql = f.read
+      @conn.exec(garbagesql)
+    end
   end
 
   def insert_info
     File.open("sql/insert_weathers.sql", "r:utf-8") do |f|
-      f.each_line do |weathersql|
-        @conn.exec(weathersql)
-      end
+      weathersql = f.read
+      @conn.exec(weathersql)
+    end
+
+    File.open("sql/insert_garbages.sql", "r:utf-8") do |f|
+      garbagesqlsql = f.read
+      @conn.exec(wgarbagesqlsql)
     end
   end
 
