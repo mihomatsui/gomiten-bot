@@ -48,8 +48,8 @@ class WeatherDbConnector
     end
 
     File.open("sql/insert_garbages.sql", "r:utf-8") do |f|
-      garbagesqlsql = f.read
-      @conn.exec(wgarbagesqlsql)
+      garbagesql = f.read
+      @conn.exec(garbagesql)
     end
   end
 
