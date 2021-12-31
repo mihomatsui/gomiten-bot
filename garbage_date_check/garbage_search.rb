@@ -15,4 +15,6 @@ class GarbageSearch
 end
 
 search_day = GarbageSearch.new
-p search_day.nth_day_of_week(now: Time.current.tomorrow) # =>{:nth=>3, :wday=>"水"}
+next_day = search_day.nth_day_of_week(now: Time.current.tomorrow)
+p next_day[:nth]
+p next_day[:wday]
