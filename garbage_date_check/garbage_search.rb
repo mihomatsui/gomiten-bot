@@ -13,8 +13,3 @@ class GarbageSearch
     return { nth: nth, wday: wdays[now.wday] }
   end    
 end
-
-search_day = GarbageSearch.new
-next_day = search_day.nth_day_of_week(now: Time.current.tomorrow)
-p next_day[:nth]
-p next_day[:wday]
