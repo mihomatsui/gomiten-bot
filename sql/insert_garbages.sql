@@ -1,6 +1,6 @@
-insert into garbages
+INSERT INTO garbages
   (id, type, area, wday, nweek) 
-values 
+VALUES 
   (0, '可燃ゴミ', '数奇屋', '月', 0),
   (1, '可燃ゴミ', '数奇屋', '木', 0),
   (2, '不燃ゴミ', '数奇屋', '水', 4),

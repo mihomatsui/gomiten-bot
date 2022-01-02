@@ -1,6 +1,6 @@
-insert into weathers
+INSERT INTO weathers
   (id, pref, area, latitude, longitude, url, xpath) 
-values 
+VALUES  
   (0, '北海道', '上川地方', 43.6155, 142.8410, 'http://www.drk7.jp/weather/xml/01.xml', 'weatherforecast/pref/area[1]'),
   (1, '北海道', '北見地方', 43.8061, 143.4782, 'http://www.drk7.jp/weather/xml/01.xml', 'weatherforecast/pref/area[2]'),
   (2, '北海道', '十勝地方', 42.7260, 143.4453, 'http://www.drk7.jp/weather/xml/01.xml', 'weatherforecast/pref/area[3]'),
