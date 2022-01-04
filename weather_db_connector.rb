@@ -1,9 +1,6 @@
 require 'dotenv'
 require 'pg'
-require './garbage_date_check/garbage_search'
 Dotenv.load
-
-$search = GarbageSearch.new
 
 class WeatherDbConnector
   # 名古屋市西部
@@ -81,14 +78,14 @@ class WeatherDbConnector
     return results.first
   end
 
-  def get_garbages
+  def get_garbages(garbage_area, tomorrow_wday, tomorrow_nth)
     # 週と曜日を取得
-    tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
-    tomorrow_nth = tomorrow[:nth]
-    tomorrow_wday = tomorrow[:wday]
+    # tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+    # tomorrow_nth = tomorrow[:nth]
+    # tomorrow_wday = tomorrow[:wday]
     # テキストメッセージから地域を取得
     # 地域、週、曜日で検索してtypeを抜き出す
-    result = @conn.exec(%{SELECT * FROM garbages WHERE area = #{garbage_area} AND wday = #{tomorrow_wday} AND (nweek = #{tomorrow_nth} OR nweek = 0;})
+    result = @conn.exec(%{SELECT * FROM garbages WHERE area LIKE "%#{garbage_area}%" AND wday = #{tomorrow_wday} AND (nweek = #{tomorrow_nth} OR nweek = 0);})
     
     # 該当件数あれば明日の〇〇地域は××の日です
     if result.count == 0
