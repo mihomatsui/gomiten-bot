@@ -14,6 +14,7 @@ require './garbage_date_check/sukiya'
 require './garbage_date_check/sunahara'
 require './garbage_date_check/sengen1'
 require './garbage_date_check/sengen2'
+require './garbage_date_check/garbage_search'
 
 helpers ApplicationHelper
 get '/' do
@@ -21,6 +22,7 @@ get '/' do
 end
 
 $db = WeatherDbConnector.new
+$search = GarbageSearch.new
 
 helpers do
   def protected!
@@ -124,21 +126,37 @@ post '/callback' do
           reply_text << "・ゴミの収集日は地域を入力すると返信でお知らせします。\n"
           reply_text << "・対象地域は「ゴミの収集日」でご確認ください。\n"
         when /.*(ゴミ|ごみ).*/
-          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・下記の文字を入力してください。\n（カッコは不要です。)\n\n"
-          reply_text << "＜対応地域一覧＞\n\n"
-          reply_text << "・名古屋市西区数奇屋\n「数奇屋」または「すきや」\n\n"
-          reply_text << "・名古屋市西区砂原町\n「砂原町」または「すなはら」\n\n"
-          reply_text << "・名古屋市西区浅間一丁目\n「浅間1」または「浅間一」\n\n"
-          reply_text << "・名古屋市西区浅間二丁目\n「浅間2」または「浅間二」\n"
+          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・該当地域の数字を半角で入力してください。\n\n"
+          reply_text << "＜対応地域一覧＞\n"
+          reply_text << "1.名古屋市西区数奇屋\n"
+          reply_text << "2.名古屋市西区砂原町\n"
+          reply_text << "3.名古屋市西区浅間一丁目\n"
+          reply_text << "4.名古屋市西区浅間二丁目\n"
           
         when /.*(数奇屋|すきや).*/
-          reply_text =  GarbageDateSuk.notice_message
+          $search = GarbageSearch.new
+          # 週と曜日を取得
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area = "数奇屋"
+          p tomorrow_nth
+          p tomorrow_wday
+          p garbage_area
+          $db.get_garbages(garbage_area, tomorrow_wday, tomorrow_nth)
+          reply_text = message
         when /.*(砂原|すなはら).*/
-          reply_text =  GarbageDateSun.notice_message
+          garbage_area = event.message["text"]
+          $db.get_garbages
+          reply_text = message
         when /.*(浅間1|浅間一).*/
-          reply_text =  GarbageDateSen1.notice_message
+          garbage_area = event.message["text"]
+          $db.get_garbages
+          reply_text = message
         when /.*(浅間2|浅間二).*/
-          reply_text =  GarbageDateSen2.notice_message
+          garbage_area = event.message["text"]
+          $db.get_garbages
+          reply_text = message
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
