@@ -133,30 +133,38 @@ post '/callback' do
           reply_text << "3.名古屋市西区浅間一丁目\n"
           reply_text << "4.名古屋市西区浅間二丁目\n"
           
-        when /.*(数奇屋|すきや).*/
+        when /.*(1).*/
           $search = GarbageSearch.new
           # 週と曜日を取得
           tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
-          garbage_area = "数奇屋"
-          p tomorrow_nth
-          p tomorrow_wday
-          p garbage_area
-          $db.get_garbages(garbage_area, tomorrow_wday, tomorrow_nth)
-          reply_text = message
-        when /.*(砂原|すなはら).*/
-          garbage_area = event.message["text"]
-          $db.get_garbages
-          reply_text = message
-        when /.*(浅間1|浅間一).*/
-          garbage_area = event.message["text"]
-          $db.get_garbages
-          reply_text = message
-        when /.*(浅間2|浅間二).*/
-          garbage_area = event.message["text"]
-          $db.get_garbages
-          reply_text = message
+          garbage_area_id = 1
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(2).*/
+          $search = GarbageSearch.new
+          # 週と曜日を取得
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 2
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(3).*/
+          $search = GarbageSearch.new
+          # 週と曜日を取得
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 3
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(4).*/
+          $search = GarbageSearch.new
+          # 週と曜日を取得
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 4
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
