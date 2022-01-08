@@ -82,7 +82,7 @@ class WeatherDbConnector
     # 地域、週、曜日で検索してtypeを抜き出す
     result = @conn.exec(%{SELECT * FROM garbages WHERE area_id = #{garbage_area_id} AND wday = '#{tomorrow_wday}' AND (nweek = #{tomorrow_nth} OR nweek = 0);})
     
-    # 該当件数あれば分類を表示
+    # 該当件数あればゴミの分類を表示
     if result.count == 0
      message = ''
      message << %{明日(#{Time.current.tomorrow.strftime("%m月%d日%a")})は、}
