@@ -1,4 +1,4 @@
-create table if not exists weathers (
+CREATE TABLE IF NOT EXISTS weathers (
   id int primary key, 
   pref varchar(32),
   area varchar(32),
