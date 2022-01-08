@@ -10,10 +10,7 @@ end
 require './weather_db_connector'
 require './weather_info_connector'
 require './helpers/application_helper'
-require './garbage_date_check/sukiya'
-require './garbage_date_check/sunahara'
-require './garbage_date_check/sengen1'
-require './garbage_date_check/sengen2'
+require './garbage_search'
 
 helpers ApplicationHelper
 get '/' do
@@ -21,6 +18,7 @@ get '/' do
 end
 
 $db = WeatherDbConnector.new
+$search = GarbageSearch.new
 
 helpers do
   def protected!
@@ -52,8 +50,7 @@ get '/send' do
     forecast = weather_info_conn.get_weatherinfo(row["pref"], row["area"], row["url"].sub(/http/, "https"), row["xpath"], set_day)
     puts forecast
     message = { type: "text", text: forecast }
-    p "push message"
-
+  
     case forecast
     when /.*(雨|雪).*/ 
       message_sticker = {"type": "sticker", "packageId": "446", "stickerId": "1994"}
@@ -125,21 +122,42 @@ post '/callback' do
           reply_text << "・ゴミの収集日は地域を入力すると返信でお知らせします。\n"
           reply_text << "・対象地域は「ゴミの収集日」でご確認ください。\n"
         when /.*(ゴミ|ごみ).*/
-          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・下記の文字を入力してください。\n（カッコは不要です。)\n\n"
-          reply_text << "＜対応地域一覧＞\n\n"
-          reply_text << "・名古屋市西区数奇屋\n「数奇屋」または「すきや」\n\n"
-          reply_text << "・名古屋市西区砂原町\n「砂原町」または「すなはら」\n\n"
-          reply_text << "・名古屋市西区浅間一丁目\n「浅間1」または「浅間一」\n\n"
-          reply_text << "・名古屋市西区浅間二丁目\n「浅間2」または「浅間二」\n"
+          reply_text = "使い方:\n\n・明日のゴミの収集日をお知らせします。\n・該当地域の数字を半角で入力してください。\n\n"
+          reply_text << "＜対応地域一覧＞\n"
+          reply_text << "1.名古屋市西区数奇屋\n"
+          reply_text << "2.名古屋市西区砂原町\n"
+          reply_text << "3.名古屋市西区浅間一丁目\n"
+          reply_text << "4.名古屋市西区浅間二丁目\n"
           
-        when /.*(数奇屋|すきや).*/
-          reply_text =  GarbageDateSuk.notice_message
-        when /.*(砂原町|すなはら).*/
-          reply_text =  GarbageDateSun.notice_message
-        when /.*(浅間1|浅間一).*/
-          reply_text =  GarbageDateSen1.notice_message
-        when /.*(浅間2|浅間二).*/
-          reply_text =  GarbageDateSen2.notice_message
+        when /.*(1).*/
+          $search = GarbageSearch.new
+          # 週と曜日を取得
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 1
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(2).*/
+          $search = GarbageSearch.new
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 2
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(3).*/
+          $search = GarbageSearch.new
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 3
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+        when /.*(4).*/
+          $search = GarbageSearch.new
+          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow_nth = tomorrow[:nth]
+          tomorrow_wday = tomorrow[:wday]
+          garbage_area_id = 4
+          reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         end
       when Line::Bot::Event::MessageType::Location
         # 位置情報が入力された場合
@@ -147,7 +165,6 @@ post '/callback' do
         # 位置情報を取得
         latitude = event.message["latitude"]
         longitude = event.message["longitude"]
-        puts "位置情報を取得しました！"
         pref, area = $db.set_weather_location(user_id, latitude, longitude)
         reply_text = %{天気の地域を#{pref} #{area}にセットしました！}
         reply_text << %{\n\n「天気」と入力すると、現在設定されている地域の天気をお知らせします。}
