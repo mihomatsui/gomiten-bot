@@ -14,7 +14,9 @@ class WeatherDbConnector
       port: ENV["DB_PORT"],
       password: ENV["DB_PASSWORD"]
     )
-    init
+    result = @conn.exec(%{SELECT schemaname, tablename, tableowner 
+    from pg_tables WHERE schemaname NOT LIKE 'pg_%' and schemaname != 'information_schema';})
+    init if result.count == 0
   end
   
   def init
@@ -23,42 +25,43 @@ class WeatherDbConnector
   end
  
   def create_table
-    #create_weathers_table
     File.open("sql/create_weathers.sql", "r:utf-8") do |f|
       weathersql = f.read
       @conn.exec(weathersql)
     end
 
-    #create_notifications_table
     File.open("sql/notifications.sql", "r:utf-8") do |f|
       notificationsql = f.read
       @conn.exec(notificationsql)
     end
+
+    File.open("sql/create_garbages.sql", "r:utf-8") do |f|
+      garbagesql = f.read
+      @conn.exec(garbagesql)
+    end
   end
 
   def insert_info
-    #insert_weathers
     File.open("sql/insert_weathers.sql", "r:utf-8") do |f|
-      f.each_line do |weathersql|
-        @conn.exec(weathersql)
-      end
+      weathersql = f.read
+      @conn.exec(weathersql)
+    end
+
+    File.open("sql/insert_garbages.sql", "r:utf-8") do |f|
+      garbagesql = f.read
+      @conn.exec(garbagesql)
     end
   end
-  
-  def drop_table
-    #drop_table
-    @conn.exec(%{drop table if exists weathers, notifications;})
-  end
-  
+
   def set_weather_location(user_id, latitude, longitude)
-    result = @conn.exec(%{select * from weathers order by abs(latitude - #{latitude}) + abs(longitude - #{longitude}) asc;}).first
+    result = @conn.exec(%{SELECT * FROM weathers ORDER BY ABS(latitude - #{latitude}) + ABS(longitude - #{longitude}) ASC;}).first
     puts %{#{result["id"]},#{result["pref"]},#{result["area"]},#{result["latitude"]},#{result["longitude"]}}
-    @conn.exec(%{insert into notifications (user_id, area_id) values ('#{user_id}', '#{result["id"]}') on conflict on constraint notifications_pkey do update set user_id = excluded.user_id, area_id = excluded.area_id;})
+    @conn.exec(%{INSERT INTO notifications (user_id, area_id) VALUES ('#{user_id}', '#{result["id"]}') ON CONFLICT ON CONSTRAINT notifications_pkey DO UPDATE SET user_id = excluded.user_id, area_id = excluded.area_id;})
     return result["pref"], result["area"]
   end
 
   def get_all_notifications
-   results = @conn.exec(%{select * from notifications inner join weathers on notifications.area_id = weathers.id;})
+   results = @conn.exec(%{SELECT * FROM notifications INNER JOIN weathers ON notifications.area_id = weathers.id;})
    results.each do |row|
     puts "----------------------------"
     p row
@@ -67,11 +70,28 @@ class WeatherDbConnector
   end
 
   def get_notifications(user_id)
-    results = @conn.exec(%{select * from notifications inner join weathers on notifications.area_id = weathers.id where notifications.user_id = '#{user_id}';})
+    results = @conn.exec(%{SELECT * FROM notifications INNER JOIN weathers ON notifications.area_id = weathers.id WHERE notifications.user_id = '#{user_id}';})
     results.each do |row|
       puts "----------------------------"
       p row
     end
     return results.first
+  end
+
+  def get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
+    # 地域、週、曜日で検索してtypeを抜き出す
+    result = @conn.exec(%{SELECT * FROM garbages WHERE area_id = #{garbage_area_id} AND wday = '#{tomorrow_wday}' AND (nweek = #{tomorrow_nth} OR nweek = 0);})
+    
+    # 該当件数あれば分類を表示
+    if result.count == 0
+     message = ''
+     message << %{明日(#{Time.current.tomorrow.strftime("%m月%d日%a")})は、}
+     message << %{特に出せるゴミはありません}
+    else
+     message = ''
+     message << %{明日(#{Time.current.tomorrow.strftime("%m月%d日%a")})は、}
+     message << %{#{result["type"]}の日です}
+    end
+    return message
   end
 end
