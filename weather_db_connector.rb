@@ -79,8 +79,6 @@ class WeatherDbConnector
   end
 
   def get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
-    # 週と曜日を取得
-    # テキストメッセージから地域を取得
     # 地域、週、曜日で検索してtypeを抜き出す
     result = @conn.exec(%{SELECT * FROM garbages WHERE area_id = #{garbage_area_id} AND wday = '#{tomorrow_wday}' AND (nweek = #{tomorrow_nth} OR nweek = 0);})
     

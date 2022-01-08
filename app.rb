@@ -139,7 +139,6 @@ post '/callback' do
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(2).*/
           $search = GarbageSearch.new
-          # 週と曜日を取得
           tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
@@ -147,7 +146,6 @@ post '/callback' do
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(3).*/
           $search = GarbageSearch.new
-          # 週と曜日を取得
           tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
@@ -155,7 +153,6 @@ post '/callback' do
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(4).*/
           $search = GarbageSearch.new
-          # 週と曜日を取得
           tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
