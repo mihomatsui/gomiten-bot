@@ -20,7 +20,7 @@ Qiitaに詳細を執筆しております。 [【Ruby+Sinatra】ゴミの収集�
 
 
 ## ER図
-<img width="700" alt="er図" src="https://user-images.githubusercontent.com/70443334/140643883-b77735c9-73f9-44b0-874c-d2b72d1c0595.png">
+<img width="700" alt="er図2" src="https://user-images.githubusercontent.com/70443334/148638758-969f8e72-2fc5-41e2-8048-9bec802d280e.png">
 
 ## 使用技術
 - 言語：Ruby(2.7.3)
