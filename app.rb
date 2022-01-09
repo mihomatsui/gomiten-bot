@@ -132,28 +132,28 @@ post '/callback' do
         when /.*(1).*/
           $search = GarbageSearch.new
           # 週と曜日を取得
-          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow = $search.nth_day_of_week
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
           garbage_area_id = 1
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(2).*/
           $search = GarbageSearch.new
-          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow = $search.nth_day_of_week
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
           garbage_area_id = 2
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(3).*/
           $search = GarbageSearch.new
-          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow = $search.nth_day_of_week
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
           garbage_area_id = 3
           reply_text = $db.get_garbages(garbage_area_id, tomorrow_wday, tomorrow_nth)
         when /.*(4).*/
           $search = GarbageSearch.new
-          tomorrow = $search.nth_day_of_week(now: Time.current.tomorrow)
+          tomorrow = $search.nth_day_of_week
           tomorrow_nth = tomorrow[:nth]
           tomorrow_wday = tomorrow[:wday]
           garbage_area_id = 4
