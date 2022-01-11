@@ -1,7 +1,6 @@
+require 'date'
+require 'active_support/all'
 class GarbageSearch
-  require 'date'
-  require 'active_support/all'
-
   def nth_day_of_week
     wdays = { 0 => "日", 1 => "月", 2 => "火", 3 => "水", 4 => "木", 5 => "金", 6 => "土" }
     
