@@ -147,15 +147,15 @@ post '/callback' do
         when /.*(3).*/
           $search = GarbageSearch.new
           tomorrow = $search.nth_day_of_week
-          tomorrow_nth = tomorrow[:nth]
-          tomorrow_wday = tomorrow[:wday]
+          nth = tomorrow[:nth]
+          wday = tomorrow[:wday]
           garbage_area_id = 3
           reply_text = $db.get_garbages(garbage_area_id, wday, nth)
         when /.*(4).*/
           $search = GarbageSearch.new
           tomorrow = $search.nth_day_of_week
-          tomorrow_nth = tomorrow[:nth]
-          tomorrow_wday = tomorrow[:wday]
+          nth = tomorrow[:nth]
+          wday = tomorrow[:wday]
           garbage_area_id = 4
           reply_text = $db.get_garbages(garbage_area_id, wday, nth)
         end
