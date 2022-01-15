@@ -86,11 +86,11 @@ class WeatherDbConnector
     # 該当件数あればゴミの分類を表示
     if result.count == 0
      message = ''
-     message << %{明日は、}
+     message << %{明日は}
      message << %{特に出せるゴミはありません}
     else
      message = ''
-     message << %{明日は、}
+     message << %{明日は}
      message << %{#{result["type"]}の日です}
     end
     return message
