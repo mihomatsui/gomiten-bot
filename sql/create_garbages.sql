@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS garbages (
   type varchar(32),
   area varchar(32),
   area_id int,
-  wday varchar(32),
+  wday int,
   nweek int
 )
