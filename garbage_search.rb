@@ -11,6 +11,3 @@ class GarbageSearch
     return { nth: nth_arr[0], wday: Date.tomorrow.wday }
   end    
 end
-
-search = GarbageSearch.new
-p search.nth_day_of_week
