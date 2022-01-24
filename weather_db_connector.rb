@@ -80,7 +80,7 @@ class WeatherDbConnector
 
   def get_garbages(garbage_area_id, wday, nth)
     # 地域、週、曜日で検索してtypeを抜き出す
-    result = @conn.exec(%{SELECT * FROM garbages WHERE area_id = #{garbage_area_id} AND wday::character varying = #{wday} AND (nweek = #{nth} OR nweek = 0);})
+    result = @conn.exec(%{SELECT * FROM garbages WHERE area_id = #{garbage_area_id} AND wday::integer = #{wday} AND (nweek = #{nth} OR nweek = 0);})
 
     # 該当件数あればゴミの分類を表示
     if result.count == 0
