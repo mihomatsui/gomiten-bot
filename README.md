@@ -16,7 +16,7 @@
 - LINEの画面からQRコードを読み込み、友達追加をすると操作ができます。
 <img width="200" src="https://user-images.githubusercontent.com/70443334/140516491-61f21163-9b1d-4158-af74-381c36bb0025.png">
 
-Qiitaに詳細を執筆しております。 [【Ruby+Sinatra】ゴミの収集日と天気予報がLINEで確認できるポートフォリオを制作しました](https://qiita.com/mihooo24/items/fc3b6a1fcd3a1459564f)
+Qiitaに詳細を執筆しております。 [【Ruby+Sinatra】ゴミの収集日と天気予報がLINEで確認できるアプリを制作しました](https://qiita.com/mihooo24/items/fc3b6a1fcd3a1459564f)
 
 
 ## ER図
